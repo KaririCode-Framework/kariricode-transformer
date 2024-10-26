@@ -15,7 +15,10 @@ class TemplateTransformer extends AbstractTransformerProcessor implements Config
     private string $template = '';
     private string $openTag = '{{';
     private string $closeTag = '}}';
-    private ?callable $missingValueHandler = null;
+
+    /** @var callable|null */
+    private mixed $missingValueHandler = null;
+
     private bool $removeUnmatchedTags = false;
 
     public function configure(array $options): void
@@ -31,11 +34,13 @@ class TemplateTransformer extends AbstractTransformerProcessor implements Config
     {
         if (!is_array($input)) {
             $this->setInvalid('notArray');
+
             return $this->template;
         }
 
         if (empty($this->template)) {
             $this->setInvalid('noTemplate');
+
             return '';
         }
 
@@ -45,18 +50,18 @@ class TemplateTransformer extends AbstractTransformerProcessor implements Config
     private function replacePlaceholders(array $data): string
     {
         $pattern = '/' . preg_quote($this->openTag, '/') . '\s*(.+?)\s*' . preg_quote($this->closeTag, '/') . '/';
-        
-        return preg_replace_callback($pattern, function($matches) use ($data) {
+
+        return preg_replace_callback($pattern, function ($matches) use ($data) {
             $key = trim($matches[1]);
-            
+
             if (isset($data[$key])) {
                 return $data[$key];
             }
-            
-            if ($this->missingValueHandler !== null) {
+
+            if (null !== $this->missingValueHandler) {
                 return call_user_func($this->missingValueHandler, $key);
             }
-            
+
             return $this->removeUnmatchedTags ? '' : $matches[0];
         }, $this->template);
     }

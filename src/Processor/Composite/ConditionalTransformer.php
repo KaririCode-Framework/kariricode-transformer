@@ -10,7 +10,10 @@ use KaririCode\Transformer\Processor\AbstractTransformerProcessor;
 class ConditionalTransformer extends AbstractTransformerProcessor implements ConfigurableProcessor
 {
     private ?AbstractTransformerProcessor $transformer = null;
-    private ?callable $condition = null;
+
+    /** @var callable|null */
+    private mixed $condition = null;
+
     private mixed $defaultValue = null;
     private bool $useDefaultOnError = true;
 
@@ -41,12 +44,14 @@ class ConditionalTransformer extends AbstractTransformerProcessor implements Con
 
             if (!$this->transformer->isValid() && $this->useDefaultOnError) {
                 $this->setInvalid($this->transformer->getErrorKey());
+
                 return $this->defaultValue ?? $input;
             }
 
             return $result;
         } catch (\Exception $e) {
             $this->setInvalid('transformationError');
+
             return $this->defaultValue ?? $input;
         }
     }
