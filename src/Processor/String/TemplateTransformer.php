@@ -20,6 +20,7 @@ class TemplateTransformer extends AbstractTransformerProcessor implements Config
     private mixed $missingValueHandler = null;
 
     private bool $removeUnmatchedTags = false;
+    private bool $preserveData = true;
 
     public function configure(array $options): void
     {
@@ -28,20 +29,27 @@ class TemplateTransformer extends AbstractTransformerProcessor implements Config
         $this->closeTag = $options['closeTag'] ?? $this->closeTag;
         $this->missingValueHandler = $options['missingValueHandler'] ?? $this->missingValueHandler;
         $this->removeUnmatchedTags = $options['removeUnmatchedTags'] ?? $this->removeUnmatchedTags;
+        $this->preserveData = $options['preserveData'] ?? $this->preserveData;
     }
 
-    public function process(mixed $input): string
+    public function process(mixed $input): mixed
     {
         if (!is_array($input)) {
             $this->setInvalid('notArray');
 
-            return $this->template;
+            return $input;
         }
 
         if (empty($this->template)) {
             $this->setInvalid('noTemplate');
 
-            return '';
+            return $input;
+        }
+
+        if ($this->preserveData) {
+            $input['_rendered'] = $this->replacePlaceholders($input);
+
+            return $input;
         }
 
         return $this->replacePlaceholders($input);

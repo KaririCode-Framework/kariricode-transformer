@@ -27,7 +27,7 @@ final class Transformer implements TransformerContract
 
     public function transform(mixed $object): TransformationResult
     {
-        $handler = new ProcessorAttributeHandler(
+        $attributeHandler = new ProcessorAttributeHandler(
             self::IDENTIFIER,
             $this->builder
         );
@@ -37,7 +37,7 @@ final class Transformer implements TransformerContract
         );
 
         /** @var ProcessorAttributeHandler */
-        $handler = $propertyInspector->inspect($object, $handler);
+        $handler = $propertyInspector->inspect($object, $attributeHandler);
         $handler->applyChanges($object);
 
         return new TransformationResult(

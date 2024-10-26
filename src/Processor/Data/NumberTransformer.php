@@ -14,6 +14,7 @@ class NumberTransformer extends AbstractTransformerProcessor implements Configur
     private string $thousandsSeparator = '';
     private ?float $multiplier = null;
     private bool $roundUp = false;
+    private bool $formatAsString = false;
 
     public function configure(array $options): void
     {
@@ -22,14 +23,15 @@ class NumberTransformer extends AbstractTransformerProcessor implements Configur
         $this->thousandsSeparator = $options['thousandsSeparator'] ?? $this->thousandsSeparator;
         $this->multiplier = $options['multiplier'] ?? $this->multiplier;
         $this->roundUp = $options['roundUp'] ?? $this->roundUp;
+        $this->formatAsString = $options['formatAsString'] ?? $this->formatAsString;
     }
 
-    public function process(mixed $input): string
+    public function process(mixed $input): float|string
     {
         if (!is_numeric($input)) {
             $this->setInvalid('notNumeric');
 
-            return '';
+            return $this->formatAsString ? '' : 0.0;
         }
 
         $number = (float) $input;
@@ -42,11 +44,15 @@ class NumberTransformer extends AbstractTransformerProcessor implements Configur
             $number = ceil($number * (10 ** $this->decimals)) / (10 ** $this->decimals);
         }
 
-        return number_format(
-            $number,
-            $this->decimals,
-            $this->decimalPoint,
-            $this->thousandsSeparator
-        );
+        if ($this->formatAsString) {
+            return number_format(
+                $number,
+                $this->decimals,
+                $this->decimalPoint,
+                $this->thousandsSeparator
+            );
+        }
+
+        return round($number, $this->decimals);
     }
 }

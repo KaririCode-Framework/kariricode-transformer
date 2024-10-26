@@ -12,12 +12,14 @@ class JsonTransformer extends AbstractTransformerProcessor implements Configurab
     private bool $assoc = true;
     private int $depth = 512;
     private int $encodeOptions = 0;
+    private bool $returnString = false;
 
     public function configure(array $options): void
     {
         $this->assoc = $options['assoc'] ?? $this->assoc;
         $this->depth = $options['depth'] ?? $this->depth;
         $this->encodeOptions = $options['encodeOptions'] ?? $this->encodeOptions;
+        $this->returnString = $options['returnString'] ?? $this->returnString;
     }
 
     public function process(mixed $input): mixed
@@ -26,7 +28,11 @@ class JsonTransformer extends AbstractTransformerProcessor implements Configurab
             return $this->decode($input);
         }
 
-        return $this->encode($input);
+        if (is_array($input) && $this->returnString) {
+            return $this->encode($input);
+        }
+
+        return $input;
     }
 
     private function decode(string $input): mixed
