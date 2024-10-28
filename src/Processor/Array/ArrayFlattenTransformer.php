@@ -6,12 +6,9 @@ namespace KaririCode\Transformer\Processor\Array;
 
 use KaririCode\Contract\Processor\ConfigurableProcessor;
 use KaririCode\Transformer\Processor\AbstractTransformerProcessor;
-use KaririCode\Transformer\Trait\ArrayTransformerTrait;
 
 class ArrayFlattenTransformer extends AbstractTransformerProcessor implements ConfigurableProcessor
 {
-    use ArrayTransformerTrait;
-
     private int $depth = -1;
     private string $separator = '.';
 
@@ -40,10 +37,7 @@ class ArrayFlattenTransformer extends AbstractTransformerProcessor implements Co
             $newKey = $prefix ? $prefix . $this->separator . $key : $key;
 
             if (is_array($value) && ($depth > 0 || -1 === $depth)) {
-                $result = array_merge(
-                    $result,
-                    $this->flattenArray($value, $newKey, $depth > 0 ? $depth - 1 : -1)
-                );
+                $result += $this->flattenArray($value, $newKey, $depth > 0 ? $depth - 1 : -1);
             } else {
                 $result[$newKey] = $value;
             }

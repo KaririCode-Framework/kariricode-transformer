@@ -15,6 +15,7 @@ class ArrayMapTransformer extends AbstractTransformerProcessor implements Config
     private array $mapping = [];
     private bool $removeUnmapped = false;
     private bool $recursive = true;
+    private ?string $case = null;
 
     public function configure(array $options): void
     {
@@ -25,6 +26,7 @@ class ArrayMapTransformer extends AbstractTransformerProcessor implements Config
         $this->mapping = $options['mapping'];
         $this->removeUnmapped = $options['removeUnmapped'] ?? $this->removeUnmapped;
         $this->recursive = $options['recursive'] ?? $this->recursive;
+        $this->case = $options['case'] ?? null; // Opcional
     }
 
     public function process(mixed $input): array
@@ -35,7 +37,9 @@ class ArrayMapTransformer extends AbstractTransformerProcessor implements Config
             return [];
         }
 
-        return $this->mapArray($input);
+        $mappedArray = $this->mapArray($input);
+
+        return $this->case ? $this->transformArrayKeys($mappedArray, $this->case) : $mappedArray;
     }
 
     private function mapArray(array $array): array
@@ -43,18 +47,13 @@ class ArrayMapTransformer extends AbstractTransformerProcessor implements Config
         $result = [];
 
         foreach ($array as $key => $value) {
-            if (is_array($value) && $this->recursive) {
-                $result[$key] = $this->mapArray($value);
-                continue;
-            }
-
             $mappedKey = $this->mapping[$key] ?? $key;
 
             if ($this->removeUnmapped && !isset($this->mapping[$key])) {
                 continue;
             }
 
-            $result[$mappedKey] = $value;
+            $result[$mappedKey] = is_array($value) && $this->recursive ? $this->mapArray($value) : $value;
         }
 
         return $result;

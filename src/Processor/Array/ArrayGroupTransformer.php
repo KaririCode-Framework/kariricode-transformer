@@ -6,12 +6,9 @@ namespace KaririCode\Transformer\Processor\Array;
 
 use KaririCode\Contract\Processor\ConfigurableProcessor;
 use KaririCode\Transformer\Processor\AbstractTransformerProcessor;
-use KaririCode\Transformer\Trait\ArrayTransformerTrait;
 
 class ArrayGroupTransformer extends AbstractTransformerProcessor implements ConfigurableProcessor
 {
-    use ArrayTransformerTrait;
-
     private string $groupBy = '';
     private bool $preserveKeys = false;
 
