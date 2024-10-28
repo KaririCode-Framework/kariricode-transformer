@@ -12,12 +12,7 @@ class ArrayKeyTransformer extends AbstractTransformerProcessor implements Config
 {
     use ArrayTransformerTrait;
 
-    private const CASE_SNAKE = 'snake';
-    private const CASE_CAMEL = 'camel';
-    private const CASE_PASCAL = 'pascal';
-    private const CASE_KEBAB = 'kebab';
-
-    private string $case = self::CASE_SNAKE;
+    private string $case = 'snake'; // Valores possíveis: snake, camel, pascal, kebab
     private bool $recursive = true;
 
     public function configure(array $options): void
@@ -37,44 +32,26 @@ class ArrayKeyTransformer extends AbstractTransformerProcessor implements Config
             return [];
         }
 
-        return $this->transformArrayKeys($input);
+        // Transforma as chaves apenas no nível principal se recursive for false
+        return $this->recursive
+            ? $this->transformArrayKeys($input, $this->case)
+            : $this->transformKeysNonRecursive($input, $this->case);
     }
 
-    private function transformArrayKeys(array $array): array
+    private function transformKeysNonRecursive(array $array, string $case): array
     {
         $result = [];
 
         foreach ($array as $key => $value) {
-            $transformedKey = $this->transformKey((string) $key);
-
-            if (is_array($value) && $this->recursive) {
-                $result[$transformedKey] = $this->transformArrayKeys($value);
-            } else {
-                $result[$transformedKey] = $value;
-            }
+            $transformedKey = $this->transformKeyByCase((string) $key, $case);
+            $result[$transformedKey] = $value; // Mantém o valor original, sem recursão
         }
 
         return $result;
     }
 
-    private function transformKey(string $key): string
-    {
-        return match ($this->case) {
-            self::CASE_SNAKE => $this->toSnakeCase($key),
-            self::CASE_CAMEL => $this->toCamelCase($key),
-            self::CASE_PASCAL => $this->toPascalCase($key),
-            self::CASE_KEBAB => $this->toKebabCase($key),
-            default => $key,
-        };
-    }
-
     private function getAllowedCases(): array
     {
-        return [
-            self::CASE_SNAKE,
-            self::CASE_CAMEL,
-            self::CASE_PASCAL,
-            self::CASE_KEBAB,
-        ];
+        return ['snake', 'camel', 'pascal', 'kebab'];
     }
 }

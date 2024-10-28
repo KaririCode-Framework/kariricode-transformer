@@ -6,31 +6,29 @@ namespace KaririCode\Transformer\Trait;
 
 trait ArrayTransformerTrait
 {
-    protected function toCamelCase(string $input): string
-    {
-        $input = str_replace(['-', '_'], ' ', $input);
-        $input = ucwords($input);
-        $input = str_replace(' ', '', $input);
+    use StringTransformerTrait;
 
-        return lcfirst($input);
+    protected function transformArrayKeys(array $array, string $case): array
+    {
+        $result = [];
+
+        foreach ($array as $key => $value) {
+            $transformedKey = $this->transformKeyByCase((string) $key, $case);
+
+            $result[$transformedKey] = is_array($value) ? $this->transformArrayKeys($value, $case) : $value;
+        }
+
+        return $result;
     }
 
-    protected function toPascalCase(string $input): string
+    private function transformKeyByCase(string $key, string $case): string
     {
-        return ucfirst($this->toCamelCase($input));
-    }
-
-    protected function toSnakeCase(string $input): string
-    {
-        $pattern = '/([a-z0-9])([A-Z])/';
-        $input = preg_replace($pattern, '$1_$2', $input);
-        $input = str_replace(['-', ' '], '_', $input);
-
-        return strtolower($input);
-    }
-
-    protected function toKebabCase(string $input): string
-    {
-        return str_replace('_', '-', $this->toSnakeCase($input));
+        return match ($case) {
+            'camel' => $this->toCamelCase($key),
+            'snake' => $this->toSnakeCase($key),
+            'pascal' => $this->toPascalCase($key),
+            'kebab' => $this->toKebabCase($key),
+            default => $key,
+        };
     }
 }

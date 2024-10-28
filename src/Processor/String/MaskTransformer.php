@@ -6,67 +6,132 @@ namespace KaririCode\Transformer\Processor\String;
 
 use KaririCode\Contract\Processor\ConfigurableProcessor;
 use KaririCode\Transformer\Processor\AbstractTransformerProcessor;
-use KaririCode\Transformer\Trait\StringTransformerTrait;
 
 class MaskTransformer extends AbstractTransformerProcessor implements ConfigurableProcessor
 {
-    use StringTransformerTrait;
-
-    private string $mask = '';
-    private string $placeholder = '#';
-    private array $customMasks = [
+    private const DEFAULT_MASKS = [
         'phone' => '(##) #####-####',
         'cpf' => '###.###.###-##',
         'cnpj' => '##.###.###/####-##',
         'cep' => '#####-###',
     ];
+    private const DEFAULT_PLACEHOLDER = '#';
+
+    private string $mask = '';
+    private string $placeholder = self::DEFAULT_PLACEHOLDER;
+    private array $customMasks = self::DEFAULT_MASKS;
 
     public function configure(array $options): void
     {
-        if (isset($options['mask'])) {
-            $this->mask = $options['mask'];
-        } elseif (isset($options['type']) && isset($this->customMasks[$options['type']])) {
-            $this->mask = $this->customMasks[$options['type']];
-        }
-
-        $this->placeholder = $options['placeholder'] ?? $this->placeholder;
-
-        if (isset($options['customMasks']) && is_array($options['customMasks'])) {
-            $this->customMasks = array_merge($this->customMasks, $options['customMasks']);
-        }
+        $this->configureMask($options);
+        $this->configurePlaceholder($options);
     }
 
     public function process(mixed $input): string
     {
-        if (!is_string($input)) {
-            $this->setInvalid('notString');
-
+        if (!$this->isValidInput($input)) {
             return '';
         }
 
-        if (empty($this->mask)) {
-            $this->setInvalid('noMask');
-
+        if (!$this->hasMask()) {
             return $input;
         }
 
         return $this->applyMask($input);
     }
 
+    private function configureMask(array $options): void
+    {
+        if (isset($options['mask'])) {
+            $this->mask = $options['mask'];
+
+            return;
+        }
+
+        if (!isset($options['type'])) {
+            return;
+        }
+
+        $this->configureCustomMasks($options);
+        $this->setMaskFromType($options['type']);
+    }
+
+    private function configureCustomMasks(array $options): void
+    {
+        if (!isset($options['customMasks']) || !is_array($options['customMasks'])) {
+            return;
+        }
+
+        $this->customMasks = array_merge($this->customMasks, $options['customMasks']);
+    }
+
+    private function configurePlaceholder(array $options): void
+    {
+        if (!isset($options['placeholder'])) {
+            return;
+        }
+
+        $this->placeholder = $options['placeholder'];
+    }
+
+    private function setMaskFromType(string $type): void
+    {
+        if (!isset($this->customMasks[$type])) {
+            return;
+        }
+
+        $this->mask = $this->customMasks[$type];
+    }
+
+    private function isValidInput(mixed $input): bool
+    {
+        if (!is_string($input)) {
+            $this->setInvalid('notString');
+
+            return false;
+        }
+
+        return true;
+    }
+
+    private function hasMask(): bool
+    {
+        if (empty($this->mask)) {
+            $this->setInvalid('noMask');
+
+            return false;
+        }
+
+        return true;
+    }
+
     private function applyMask(string $input): string
     {
-        $result = '';
-        $inputPos = 0;
+        $maskedValue = '';
+        $inputIndex = 0;
+        $inputLength = strlen($input);
 
-        for ($maskPos = 0; $maskPos < strlen($this->mask) && $inputPos < strlen($input); ++$maskPos) {
-            if ($this->mask[$maskPos] === $this->placeholder) {
-                $result .= $input[$inputPos];
-                ++$inputPos;
-            } else {
-                $result .= $this->mask[$maskPos];
+        foreach (str_split($this->mask) as $maskChar) {
+            $maskedValue .= $this->getMaskedCharacter($maskChar, $input, $inputIndex, $inputLength);
+
+            if ($maskChar === $this->placeholder) {
+                ++$inputIndex;
             }
         }
 
-        return $result;
+        return $maskedValue;
+    }
+
+    private function getMaskedCharacter(string $maskChar, string $input, int $inputIndex, int $inputLength): string
+    {
+        if ($maskChar !== $this->placeholder) {
+            return $maskChar;
+        }
+
+        if ($inputIndex >= $inputLength) {
+            return '';
+        }
+
+        return $input[$inputIndex];
     }
 }
