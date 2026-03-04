@@ -4,48 +4,46 @@ declare(strict_types=1);
 
 namespace KaririCode\Transformer\Core;
 
+use KaririCode\PropertyInspector\AttributeAnalyzer;
+use KaririCode\PropertyInspector\Utility\PropertyInspector;
 use KaririCode\Transformer\Attribute\Transform;
 use KaririCode\Transformer\Result\TransformationResult;
 
+/**
+ * Transforms objects by reading #[Transform] attributes from properties.
+ *
+ * Uses kariricode/property-inspector for reflection caching and
+ * attribute scanning — eliminates manual ReflectionClass loops.
+ *
+ * @package KaririCode\Transformer\Core
+ * @author  Walmir Silva <walmir.silva@kariricode.org>
+ * @since   3.2.0 ARFA 1.3
+ */
 final readonly class AttributeTransformer
 {
-    public function __construct(private TransformerEngine $engine) {}
+    private PropertyInspector $inspector;
+
+    public function __construct(private TransformerEngine $engine)
+    {
+        $this->inspector = new PropertyInspector(
+            new AttributeAnalyzer(Transform::class),
+        );
+    }
 
     public function transform(object $object): TransformationResult
     {
-        $ref = new \ReflectionClass($object);
-        $data = [];
-        $fieldRules = [];
+        $handler = new TransformAttributeHandler();
 
-        foreach ($ref->getProperties() as $property) {
-            $attributes = $property->getAttributes(Transform::class);
-            if ($attributes === []) {
-                continue;
-            }
+        /** @var TransformAttributeHandler $handler */
+        $handler = $this->inspector->inspect($object, $handler);
 
-            $field = $property->getName();
-            try {
-                $data[$field] = $property->getValue($object);
-            } catch (\Error) {
-                $data[$field] = null;
-            }
+        $result = $this->engine->transform(
+            $handler->getProcessedPropertyValues(),
+            $handler->getFieldRules(),
+        );
 
-            $rules = [];
-            foreach ($attributes as $attribute) {
-                /** @var Transform $transform */
-                $transform = $attribute->newInstance();
-                $rules = [...$rules, ...$transform->rules];
-            }
-            $fieldRules[$field] = $rules;
-        }
-
-        $result = $this->engine->transform($data, $fieldRules);
-
-        foreach ($result->getTransformedData() as $field => $value) {
-            if ($ref->hasProperty($field)) {
-                $ref->getProperty($field)->setValue($object, $value);
-            }
-        }
+        $handler->setProcessedValues($result->getTransformedData());
+        $handler->applyChanges($object);
 
         return $result;
     }
