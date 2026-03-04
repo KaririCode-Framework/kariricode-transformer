@@ -1,6 +1,6 @@
 {
     "name": "kariricode/transformer",
-    "description": "Composable, rule-based data transformation engine for PHP 8.4+ — 32 rules, #[Transform] attributes, case conversion, zero dependencies. ARFA 1.3.",
+    "description": "Composable, rule-based data transformation engine for PHP 8.4+ — 32 rules, #[Transform] attributes, case conversion, powered by kariricode/property-inspector. ARFA 1.3.",
     "type": "library",
     "license": "MIT",
     "keywords": [
@@ -19,7 +19,8 @@
     ],
     "homepage": "https://kariricode.org",
     "require": {
-        "php": "^8.4"
+        "php": "^8.4",
+        "kariricode/property-inspector": "^2.0"
     },
     "autoload": {
         "psr-4": {
