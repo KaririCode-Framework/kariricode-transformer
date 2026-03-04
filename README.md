@@ -1,332 +1,187 @@
-# KaririCode Framework: Transformer Component
+# KaririCode\Transformer
 
-[![en](https://img.shields.io/badge/lang-en-red.svg)](README.md) [![pt-br](https://img.shields.io/badge/lang-pt--br-green.svg)](README.pt-br.md)
+**Composable, rule-based data transformation engine for PHP 8.4+ — 32 rules, zero dependencies.**
 
-![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white) ![PHPUnit](https://img.shields.io/badge/PHPUnit-3776AB?style=for-the-badge&logo=php&logoColor=white)
+[![PHP Version](https://img.shields.io/badge/php-%3E%3D8.4-blue)](https://www.php.net/)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![ARFA](https://img.shields.io/badge/ARFA-1.3-orange)]()
+[![Rules](https://img.shields.io/badge/rules-32-brightgreen)]()
 
-A powerful and flexible data transformation component for PHP, part of the KaririCode Framework. It uses attribute-based transformation with configurable processors to ensure consistent data transformation and formatting in your applications.
+Part of the [KaririCode Framework](https://github.com/kariricode) processing ecosystem.
 
-## Table of Contents
+## Why KaririCode\Transformer
 
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-  - [Basic Usage](#basic-usage)
-  - [Advanced Usage: Data Formatting](#advanced-usage-data-formatting)
-- [Available Transformers](#available-transformers)
-  - [String Transformers](#string-transformers)
-  - [Data Transformers](#data-transformers)
-  - [Array Transformers](#array-transformers)
-  - [Composite Transformers](#composite-transformers)
-- [Configuration](#configuration)
-- [Integration with Other KaririCode Components](#integration-with-other-kariricode-components)
-- [Development and Testing](#development-and-testing)
-- [Contributing](#contributing)
-- [License](#license)
-- [Support and Community](#support-and-community)
-
-## Features
-
-- Attribute-based transformation for object properties
-- Comprehensive set of built-in transformers for common use cases
-- Easy integration with other KaririCode components
-- Configurable processors for customized transformation logic
-- Extensible architecture allowing custom transformers
-- Robust error handling and reporting
-- Chainable transformation pipelines for complex data transformation
-- Built-in support for multiple transformation scenarios
-- Type-safe transformation with PHP 8.3 features
-- Preservation of original data types
-- Flexible formatting options for various data types
+- **32 built-in rules** across 7 categories — String, Data, Numeric, Date, Structure, Brazilian, Encoding
+- **Zero external dependencies** — pure PHP 8.4+
+- **Same architecture as Validator & Sanitizer** — consistent DPO pipeline
+- **Transformation tracking** — every change logged with before/after values
+- **Attribute-driven DTOs** — `#[Transform]` on properties for declarative transformation
+- **Pipeline composition** — rules chain sequentially per field
 
 ## Installation
-
-You can install the Transformer component via Composer:
 
 ```bash
 composer require kariricode/transformer
 ```
 
-### Requirements
+## Quick Start
 
-- PHP 8.3 or higher
-- Composer
-- Extensions: `ext-mbstring`, `ext-json`
+```php
+use KaririCode\Transformer\Provider\TransformerServiceProvider;
 
-## Usage
+$engine = (new TransformerServiceProvider())->createEngine();
 
-### Basic Usage
+$result = $engine->transform(
+    data: [
+        'name'  => 'walmir_silva',
+        'price' => 1234.5,
+        'rank'  => 3,
+        'cpf'   => '529.982.247-25',
+    ],
+    fieldRules: [
+        'name'  => ['pascal_case'],
+        'price' => [['currency_format', ['prefix' => 'R$ ', 'dec_point' => ',', 'thousands' => '.']]],
+        'rank'  => ['ordinal'],
+        'cpf'   => ['cpf_to_digits'],
+    ],
+);
 
-1. Define your data class with transformation attributes:
+echo $result->get('name');  // "WalmirSilva"
+echo $result->get('price'); // "R$ 1.234,50"
+echo $result->get('rank');  // "3rd"
+echo $result->get('cpf');   // "52998224725"
+```
+
+## Attribute-Driven DTO Transformation
 
 ```php
 use KaririCode\Transformer\Attribute\Transform;
 
-class DataFormatter
+final class ApiResponse
 {
-    #[Transform(
-        processors: ['date' => ['inputFormat' => 'd/m/Y', 'outputFormat' => 'Y-m-d']]
-    )]
-    private string $date = '25/12/2024';
+    #[Transform('camel_case')]
+    public string $fieldName = 'user_first_name';
 
-    #[Transform(
-        processors: ['number' => ['decimals' => 2, 'decimalPoint' => ',', 'thousandsSeparator' => '.']]
-    )]
-    private float $price = 1234.56;
+    #[Transform(['mask', ['keep_start' => 3, 'keep_end' => 2]])]
+    public string $cpf = '52998224725';
 
-    #[Transform(
-        processors: ['mask' => ['type' => 'phone']]
-    )]
-    private string $phone = '11999887766';
-
-    // Getters and setters...
+    #[Transform(['currency_format', ['prefix' => 'R$ ', 'dec_point' => ',', 'thousands' => '.']])]
+    public float $price = 1234.5;
 }
+
+$transformer = (new TransformerServiceProvider())->createAttributeTransformer();
+$result = $transformer->transform(new ApiResponse());
+
+// $dto->fieldName === 'userFirstName'
+// $dto->cpf      === '529******25'
+// $dto->price    === 'R$ 1.234,50'
 ```
 
-2. Set up the transformer and use it:
+## Case Conversion
 
 ```php
-use KaririCode\ProcessorPipeline\ProcessorRegistry;
-use KaririCode\Transformer\Transformer;
-use KaririCode\Transformer\Processor\Data\{DateTransformer, NumberTransformer};
-use KaririCode\Transformer\Processor\String\MaskTransformer;
+$result = $engine->transform(
+    ['a' => 'helloWorld', 'b' => 'hello_world', 'c' => 'Hello World', 'd' => 'hello-world'],
+    ['a' => ['snake_case'], 'b' => ['camel_case'], 'c' => ['kebab_case'], 'd' => ['pascal_case']],
+);
+// a: "hello_world", b: "helloWorld", c: "hello-world", d: "HelloWorld"
+```
 
-$registry = new ProcessorRegistry();
-$registry->register('transformer', 'date', new DateTransformer());
-$registry->register('transformer', 'number', new NumberTransformer());
-$registry->register('transformer', 'mask', new MaskTransformer());
+## Data Structure Transformations
 
-$transformer = new Transformer($registry);
+```php
+// Flatten nested arrays
+$result = $engine->transform(
+    ['config' => ['a' => ['b' => 1, 'c' => 2], 'd' => 3]],
+    ['config' => ['flatten']],
+);
+// config: {"a.b": 1, "a.c": 2, "d": 3}
 
-$formatter = new DataFormatter();
-$result = $transformer->transform($formatter);
+// Group by field
+$result = $engine->transform(
+    ['users' => [
+        ['dept' => 'eng', 'name' => 'Alice'],
+        ['dept' => 'hr', 'name' => 'Bob'],
+        ['dept' => 'eng', 'name' => 'Carol'],
+    ]],
+    ['users' => [['group_by', ['field' => 'dept']]]],
+);
+// users: {"eng": [{...Alice}, {...Carol}], "hr": [{...Bob}]}
+```
 
-if ($result->isValid()) {
-    echo "Date: " . $formatter->getDate() . "\n";          // Output: 2024-12-25
-    echo "Price: " . $formatter->getPrice() . "\n";        // Output: 1.234,56
-    echo "Phone: " . $formatter->getPhone() . "\n";        // Output: (11) 99988-7766
+## Brazilian Documents
+
+```php
+$result = $engine->transform(
+    ['cpf' => '529.982.247-25', 'phone' => '85999991234'],
+    ['cpf' => ['cpf_to_digits'], 'phone' => ['phone_format']],
+);
+// cpf:   "52998224725"
+// phone: "(85) 99999-1234"
+```
+
+## All 32 Rules
+
+| Category | Rules | Aliases |
+|----------|-------|---------|
+| **String** (7) | CamelCase, SnakeCase, KebabCase, PascalCase, Mask, Reverse, Repeat | `camel_case`, `snake_case`, `kebab_case`, `pascal_case`, `mask`, `reverse`, `repeat` |
+| **Data** (5) | JsonEncode, JsonDecode, CsvToArray, ArrayToKeyValue, Implode | `json_encode`, `json_decode`, `csv_to_array`, `array_to_key_value`, `implode` |
+| **Numeric** (4) | CurrencyFormat, Percentage, Ordinal, NumberToWords | `currency_format`, `percentage`, `ordinal`, `number_to_words` |
+| **Date** (4) | DateToTimestamp, DateToIso8601, RelativeDate, Age | `date_to_timestamp`, `date_to_iso8601`, `relative_date`, `age` |
+| **Structure** (5) | Flatten, Unflatten, Pluck, GroupBy, RenameKeys | `flatten`, `unflatten`, `pluck`, `group_by`, `rename_keys` |
+| **Brazilian** (4) | CpfToDigits, CnpjToDigits, CepToDigits, PhoneFormat | `cpf_to_digits`, `cnpj_to_digits`, `cep_to_digits`, `phone_format` |
+| **Encoding** (3) | Base64Encode, Base64Decode, Hash | `base64_encode`, `base64_decode`, `hash` |
+
+## Engine API (Programmatic)
+
+```php
+$engine = (new TransformerServiceProvider())->createEngine();
+
+$result = $engine->transform(
+    ['price' => 1234.5, 'name' => 'hello_world'],
+    ['price' => [['currency_format', ['prefix' => '$']]], 'name' => ['camel_case']],
+);
+
+$result->get('price');                // "$1,234.50"
+$result->get('name');                 // "helloWorld"
+$result->wasTransformed();            // true
+$result->transformedFields();         // ['price', 'name']
+
+foreach ($result->transformationsFor('name') as $t) {
+    echo "{$t->ruleName}: '{$t->before}' → '{$t->after}'\n";
 }
+// string.camel_case: 'hello_world' → 'helloWorld'
 ```
 
-### Advanced Usage: Data Formatting
+## Ecosystem Position
 
-Here's an example of how to use the KaririCode Transformer in a real-world scenario, demonstrating various transformation capabilities:
-
-```php
-use KaririCode\Transformer\Attribute\Transform;
-
-class ComplexDataTransformer
-{
-    #[Transform(
-        processors: ['case' => ['case' => 'snake']]
-    )]
-    private string $text = 'transformThisTextToSnakeCase';
-
-    #[Transform(
-        processors: ['slug' => []]
-    )]
-    private string $title = 'This is a Title for URL!';
-
-    #[Transform(
-        processors: ['arrayKey' => ['case' => 'camel']]
-    )]
-    private array $data = [
-        'user_name' => 'John Doe',
-        'email_address' => 'john@example.com',
-        'phone_number' => '1234567890'
-    ];
-
-    #[Transform(
-        processors: [
-            'template' => [
-                'template' => 'Hello {{name}}, your order #{{order_id}} is {{status}}',
-                'removeUnmatchedTags' => true,
-                'preserveData' => true
-            ]
-        ]
-    )]
-    private array $templateData = [
-        'name' => 'John',
-        'order_id' => '12345',
-        'status' => 'completed'
-    ];
-
-    // Getters and setters...
-}
+```
+DPO Pipeline:     Input → Validator → Sanitizer → ★ Transformer ★ → Business Logic
+Infra Pipeline:   Object ↔ Normalizer ↔ Array ↔ Serializer ↔ String
+Cross-Layer:      Request DTO ↔ Mapper ↔ Domain Entity ↔ Mapper ↔ Response DTO
 ```
 
-## Available Transformers
+The Transformer **converts representation** — may change type, format, or structure. Contrast with the Sanitizer which cleans data while preserving semantic form.
 
-### String Transformers
+## Architecture
 
-- **CaseTransformer**: Transforms string case (camel, snake, pascal, kebab).
+- ARFA 1.3 compliant (immutable context, reactive pipeline, observability events)
+- Quality Directive V4.0 (all rules `final readonly`, zero dependencies)
+- See [docs/](docs/) for 3 ADRs, 2 SPECs, and compliance report
 
-  - **Configuration Options**:
-    - `case`: Target case format (lower, upper, title, sentence, camel, pascal, snake, kebab)
-    - `preserveNumbers`: Whether to preserve numbers in transformation
+## Metrics
 
-- **MaskTransformer**: Applies masks to strings (phone, CPF, CNPJ, etc.).
-
-  - **Configuration Options**:
-    - `mask`: Custom mask pattern
-    - `type`: Predefined mask type
-    - `placeholder`: Mask placeholder character
-
-- **SlugTransformer**: Generates URL-friendly slugs.
-
-  - **Configuration Options**:
-    - `separator`: Separator character
-    - `lowercase`: Convert to lowercase
-    - `replacements`: Custom character replacements
-
-- **TemplateTransformer**: Processes templates with variable substitution.
-  - **Configuration Options**:
-    - `template`: Template string
-    - `removeUnmatchedTags`: Remove unmatched placeholders
-    - `preserveData`: Keep original data in result
-
-### Data Transformers
-
-- **DateTransformer**: Converts between date formats.
-
-  - **Configuration Options**:
-    - `inputFormat`: Input date format
-    - `outputFormat`: Output date format
-    - `inputTimezone`: Input timezone
-    - `outputTimezone`: Output timezone
-
-- **NumberTransformer**: Formats numbers with locale-specific settings.
-
-  - **Configuration Options**:
-    - `decimals`: Number of decimal places
-    - `decimalPoint`: Decimal separator
-    - `thousandsSeparator`: Thousands separator
-    - `roundUp`: Round up decimals
-
-- **JsonTransformer**: Handles JSON encoding/decoding.
-  - **Configuration Options**:
-    - `encodeOptions`: JSON encoding options
-    - `preserveType`: Keep original data type
-    - `assoc`: Use associative arrays
-
-### Array Transformers
-
-- **ArrayFlattenTransformer**: Flattens nested arrays.
-
-  - **Configuration Options**:
-    - `depth`: Maximum depth to flatten
-    - `separator`: Key separator for flattened structure
-
-- **ArrayGroupTransformer**: Groups array elements by key.
-
-  - **Configuration Options**:
-    - `groupBy`: Key to group by
-    - `preserveKeys`: Maintain original keys
-
-- **ArrayKeyTransformer**: Transforms array keys.
-
-  - **Configuration Options**:
-    - `case`: Target case for keys
-    - `recursive`: Apply to nested arrays
-
-- **ArrayMapTransformer**: Maps array keys to new structure.
-  - **Configuration Options**:
-    - `mapping`: Key mapping configuration
-    - `removeUnmapped`: Remove unmapped keys
-    - `recursive`: Apply to nested arrays
-
-### Composite Transformers
-
-- **ChainTransformer**: Executes multiple transformers in sequence.
-
-  - **Configuration Options**:
-    - `transformers`: Array of transformers to execute
-    - `stopOnError`: Stop chain on first error
-
-- **ConditionalTransformer**: Applies transformations based on conditions.
-  - **Configuration Options**:
-    - `condition`: Condition callback
-    - `transformer`: Transformer to apply
-    - `defaultValue`: Value when condition fails
-
-## Configuration
-
-Transformers can be configured globally or per-instance. Example of configuring the NumberTransformer:
-
-```php
-use KaririCode\Transformer\Processor\Data\NumberTransformer;
-
-$numberTransformer = new NumberTransformer();
-$numberTransformer->configure([
-    'decimals' => 2,
-    'decimalPoint' => ',',
-    'thousandsSeparator' => '.',
-]);
-
-$registry->register('transformer', 'number', $numberTransformer);
-```
-
-## Integration with Other KaririCode Components
-
-The Transformer component integrates with:
-
-- **KaririCode\Contract**: Provides interfaces for component integration
-- **KaririCode\ProcessorPipeline**: Used for transformation pipelines
-- **KaririCode\PropertyInspector**: Processes transformation attributes
-
-## Registry Example
-
-Complete registry setup example:
-
-```php
-$registry = new ProcessorRegistry();
-
-// Register String Transformers
-$registry->register('transformer', 'case', new CaseTransformer())
-         ->register('transformer', 'mask', new MaskTransformer())
-         ->register('transformer', 'slug', new SlugTransformer())
-         ->register('transformer', 'template', new TemplateTransformer());
-
-// Register Data Transformers
-$registry->register('transformer', 'date', new DateTransformer())
-         ->register('transformer', 'number', new NumberTransformer())
-         ->register('transformer', 'json', new JsonTransformer());
-
-// Register Array Transformers
-$registry->register('transformer', 'arrayFlat', new ArrayFlattenTransformer())
-         ->register('transformer', 'arrayGroup', new ArrayGroupTransformer())
-         ->register('transformer', 'arrayKey', new ArrayKeyTransformer())
-         ->register('transformer', 'arrayMap', new ArrayMapTransformer());
-```
-
-## Development and Testing
-
-Similar development setup as the Validator component, using Docker and Make commands.
-
-### Available Make Commands
-
-- `make up`: Start services
-- `make down`: Stop services
-- `make test`: Run tests
-- `make coverage`: Generate coverage report
-- `make cs-fix`: Fix code style
-- `make quality`: Run quality checks
-
-## Contributing
-
-Contributions are welcome! Please see our [Contributing Guide](CONTRIBUTING.md).
+| Metric | Value |
+|--------|-------|
+| Source files | 49 |
+| Source lines | 1,433 |
+| Test files | 15 |
+| Test lines | 837 |
+| Total | **64 files / 2,270 lines** |
+| Rule classes | 32 |
+| Rule categories | 7 |
+| External dependencies | **0** |
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) file.
-
-## Support and Community
-
-- **Documentation**: [https://kariricode.org/docs/transformer](https://kariricode.org/docs/transformer)
-- **Issues**: [GitHub Issues](https://github.com/KaririCode-Framework/kariricode-transformer/issues)
-- **Forum**: [KaririCode Club Community](https://kariricode.club)
-- **Stack Overflow**: Tag with `kariricode-transformer`
-
----
-
-Built with ❤️ by the KaririCode team. Transforming data with elegance and precision.
+MIT © Walmir Silva — KaririCode Framework
