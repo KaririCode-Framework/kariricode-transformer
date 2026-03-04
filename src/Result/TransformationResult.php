@@ -4,33 +4,86 @@ declare(strict_types=1);
 
 namespace KaririCode\Transformer\Result;
 
-use KaririCode\ProcessorPipeline\Result\ProcessingResultCollection;
-use KaririCode\Transformer\Contract\TransformationResult as TransformationResultContract;
-
-final class TransformationResult implements TransformationResultContract
+final class TransformationResult
 {
+    /** @var list<FieldTransformation> */
+    private array $transformations = [];
+
+    /** @param array<string, mixed> $originalData @param array<string, mixed> $transformedData */
     public function __construct(
-        private readonly ProcessingResultCollection $results
-    ) {
+        private readonly array $originalData,
+        private array $transformedData,
+    ) {}
+
+    /** @return array<string, mixed> */
+    public function getOriginalData(): array { return $this->originalData; }
+
+    /** @return array<string, mixed> */
+    public function getTransformedData(): array { return $this->transformedData; }
+
+    public function get(string $field): mixed { return $this->transformedData[$field] ?? null; }
+
+    public function wasTransformed(): bool { return $this->originalData !== $this->transformedData; }
+
+    public function isFieldTransformed(string $field): bool
+    {
+        if (!array_key_exists($field, $this->originalData)) {
+            return array_key_exists($field, $this->transformedData);
+        }
+        return ($this->originalData[$field] ?? null) !== ($this->transformedData[$field] ?? null);
     }
 
-    public function isValid(): bool
+    /** @return list<string> */
+    public function transformedFields(): array
     {
-        return !$this->results->hasErrors();
+        $fields = [];
+        foreach ($this->transformedData as $field => $value) {
+            if ($this->isFieldTransformed($field)) {
+                $fields[] = $field;
+            }
+        }
+        return $fields;
     }
 
-    public function getErrors(): array
+    public function addTransformation(FieldTransformation $transformation): void
     {
-        return $this->results->getErrors();
+        $this->transformations[] = $transformation;
     }
 
-    public function getTransformedData(): array
+    public function setTransformedValue(string $field, mixed $value): void
     {
-        return $this->results->getProcessedData();
+        $this->transformedData[$field] = $value;
     }
 
-    public function toArray(): array
+    /** @return list<FieldTransformation> */
+    public function getTransformations(): array { return $this->transformations; }
+
+    /** @return list<FieldTransformation> */
+    public function transformationsFor(string $field): array
     {
-        return $this->results->toArray();
+        return array_values(array_filter(
+            $this->transformations,
+            static fn (FieldTransformation $t): bool => $t->field === $field,
+        ));
+    }
+
+    public function transformationCount(): int
+    {
+        return count(array_filter(
+            $this->transformations,
+            static fn (FieldTransformation $t): bool => $t->wasTransformed(),
+        ));
+    }
+
+    public function merge(self $other): self
+    {
+        $merged = new self(
+            [...$this->originalData, ...$other->originalData],
+            [...$this->transformedData, ...$other->transformedData],
+        );
+        foreach ([...$this->transformations, ...$other->transformations] as $t) {
+            $merged->addTransformation($t);
+        }
+        return $merged;
     }
 }
