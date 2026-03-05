@@ -5,10 +5,14 @@ declare(strict_types=1);
 namespace KaririCode\Transformer\Tests\Unit\Core;
 
 use KaririCode\Transformer\Core\TransformationContextImpl;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(\KaririCode\Transformer\Core\TransformationContextImpl::class)]
 final class TransformationContextImplTest extends TestCase
 {
+    #[Test]
     public function testCreateReturnsEmptyFieldAndParams(): void
     {
         $ctx = TransformationContextImpl::create(['a' => 1]);
@@ -17,6 +21,8 @@ final class TransformationContextImplTest extends TestCase
         $this->assertSame([], $ctx->getParameters());
     }
 
+    #[Test]
+
     public function testWithFieldReturnsNewInstance(): void
     {
         $ctx = TransformationContextImpl::create([]);
@@ -24,6 +30,8 @@ final class TransformationContextImplTest extends TestCase
         $this->assertNotSame($ctx, $ctx2);
         $this->assertSame('name', $ctx2->getFieldName());
     }
+
+    #[Test]
 
     public function testWithParametersMerges(): void
     {

@@ -7,14 +7,22 @@ namespace KaririCode\Transformer\Tests\Unit\Rule\Brazilian;
 use KaririCode\Transformer\Core\TransformationContextImpl;
 use KaririCode\Transformer\Contract\TransformationContext;
 use KaririCode\Transformer\Rule\Brazilian\{CpfToDigitsRule, CnpjToDigitsRule, CepToDigitsRule, PhoneFormatRule};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(\KaririCode\Transformer\Rule\Brazilian\CpfToDigitsRule::class)]
+#[CoversClass(\KaririCode\Transformer\Rule\Brazilian\CnpjToDigitsRule::class)]
+#[CoversClass(\KaririCode\Transformer\Rule\Brazilian\CepToDigitsRule::class)]
+#[CoversClass(\KaririCode\Transformer\Rule\Brazilian\PhoneFormatRule::class)]
 final class BrazilianRulesTest extends TestCase
 {
     private function ctx(): TransformationContext
     {
         return TransformationContextImpl::create([])->withField('test');
     }
+
+    #[Test]
 
     public function testCpfToDigits(): void
     {
@@ -23,30 +31,42 @@ final class BrazilianRulesTest extends TestCase
         $this->assertSame('123', (new CpfToDigitsRule())->transform('123', $this->ctx()));
     }
 
+    #[Test]
+
     public function testCnpjToDigits(): void
     {
         $this->assertSame('11222333000181', (new CnpjToDigitsRule())->transform('11.222.333/0001-81', $this->ctx()));
     }
+
+    #[Test]
 
     public function testCepToDigits(): void
     {
         $this->assertSame('63100000', (new CepToDigitsRule())->transform('63100-000', $this->ctx()));
     }
 
+    #[Test]
+
     public function testPhoneFormatMobile(): void
     {
         $this->assertSame('(85) 99999-1234', (new PhoneFormatRule())->transform('85999991234', $this->ctx()));
     }
+
+    #[Test]
 
     public function testPhoneFormatLandline(): void
     {
         $this->assertSame('(85) 3333-1234', (new PhoneFormatRule())->transform('8533331234', $this->ctx()));
     }
 
+    #[Test]
+
     public function testPhoneFormatInvalid(): void
     {
         $this->assertSame('123', (new PhoneFormatRule())->transform('123', $this->ctx()));
     }
+
+    #[Test]
 
     public function testNonStringPassthrough(): void
     {
@@ -54,6 +74,8 @@ final class BrazilianRulesTest extends TestCase
         $this->assertSame(42, (new CpfToDigitsRule())->transform(42, $ctx));
         $this->assertSame(null, (new CnpjToDigitsRule())->transform(null, $ctx));
     }
+
+    #[Test]
 
     public function testGetName(): void
     {

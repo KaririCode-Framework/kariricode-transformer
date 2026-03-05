@@ -7,14 +7,22 @@ namespace KaririCode\Transformer\Tests\Unit\Rule\Numeric;
 use KaririCode\Transformer\Core\TransformationContextImpl;
 use KaririCode\Transformer\Contract\TransformationContext;
 use KaririCode\Transformer\Rule\Numeric\{CurrencyFormatRule, PercentageRule, OrdinalRule, NumberToWordsRule};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(\KaririCode\Transformer\Rule\Numeric\CurrencyFormatRule::class)]
+#[CoversClass(\KaririCode\Transformer\Rule\Numeric\PercentageRule::class)]
+#[CoversClass(\KaririCode\Transformer\Rule\Numeric\OrdinalRule::class)]
+#[CoversClass(\KaririCode\Transformer\Rule\Numeric\NumberToWordsRule::class)]
 final class NumericRulesTest extends TestCase
 {
     private function ctx(array $params = []): TransformationContext
     {
         return TransformationContextImpl::create([])->withField('test')->withParameters($params);
     }
+
+    #[Test]
 
     public function testCurrencyFormat(): void
     {
@@ -25,11 +33,15 @@ final class NumericRulesTest extends TestCase
         $this->assertSame('abc', (new CurrencyFormatRule())->transform('abc', $this->ctx()));
     }
 
+    #[Test]
+
     public function testPercentage(): void
     {
         $this->assertSame('85.00%', (new PercentageRule())->transform(0.85, $this->ctx()));
         $this->assertSame('100.0%', (new PercentageRule())->transform(1.0, $this->ctx(['decimals' => 1])));
     }
+
+    #[Test]
 
     public function testOrdinal(): void
     {
@@ -44,6 +56,8 @@ final class NumericRulesTest extends TestCase
         $this->assertSame('21st', $rule->transform(21, $this->ctx()));
     }
 
+    #[Test]
+
     public function testNumberToWords(): void
     {
         $rule = new NumberToWordsRule();
@@ -55,6 +69,8 @@ final class NumericRulesTest extends TestCase
         $this->assertSame('two hundred and forty-two', $rule->transform(242, $this->ctx()));
         $this->assertSame(1000, $rule->transform(1000, $this->ctx())); // out of range
     }
+
+    #[Test]
 
     public function testGetName(): void
     {

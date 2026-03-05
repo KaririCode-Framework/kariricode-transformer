@@ -7,8 +7,11 @@ namespace KaririCode\Transformer\Tests\Unit\Provider;
 use KaririCode\Transformer\Core\AttributeTransformer;
 use KaririCode\Transformer\Core\TransformerEngine;
 use KaririCode\Transformer\Provider\TransformerServiceProvider;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(\KaririCode\Transformer\Provider\TransformerServiceProvider::class)]
 final class TransformerServiceProviderTest extends TestCase
 {
     private const EXPECTED_ALIASES = [
@@ -21,6 +24,8 @@ final class TransformerServiceProviderTest extends TestCase
         'base64_encode', 'base64_decode', 'hash',
     ];
 
+    #[Test]
+
     public function testRegistersAll32Aliases(): void
     {
         $registry = (new TransformerServiceProvider())->createRegistry();
@@ -30,10 +35,14 @@ final class TransformerServiceProviderTest extends TestCase
         }
     }
 
+    #[Test]
+
     public function testCreateEngine(): void
     {
         $this->assertInstanceOf(TransformerEngine::class, (new TransformerServiceProvider())->createEngine());
     }
+
+    #[Test]
 
     public function testCreateAttributeTransformer(): void
     {

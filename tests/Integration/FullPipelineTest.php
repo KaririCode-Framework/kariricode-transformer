@@ -5,10 +5,16 @@ declare(strict_types=1);
 namespace KaririCode\Transformer\Tests\Integration;
 
 use KaririCode\Transformer\Provider\TransformerServiceProvider;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(\KaririCode\Transformer\Core\TransformerEngine::class)]
+#[CoversClass(\KaririCode\Transformer\Provider\TransformerServiceProvider::class)]
+#[CoversClass(\KaririCode\Transformer\Core\InMemoryRuleRegistry::class)]
 final class FullPipelineTest extends TestCase
 {
+    #[Test]
     public function testAllRulesResolvable(): void
     {
         $registry = (new TransformerServiceProvider())->createRegistry();
@@ -17,6 +23,8 @@ final class FullPipelineTest extends TestCase
             $this->assertNotEmpty($rule->getName(), "Rule '{$alias}' has empty name.");
         }
     }
+
+    #[Test]
 
     public function testComplexPipeline(): void
     {

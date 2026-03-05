@@ -5,10 +5,14 @@ declare(strict_types=1);
 namespace KaririCode\Transformer\Tests\Conformance;
 
 use KaririCode\Transformer\Core\TransformationContextImpl;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(\KaririCode\Transformer\Core\TransformationContextImpl::class)]
 final class ImmutableStateTest extends TestCase
 {
+    #[Test]
     public function testContextWithFieldReturnsNewInstance(): void
     {
         $ctx = TransformationContextImpl::create(['a' => 1]);
@@ -17,6 +21,8 @@ final class ImmutableStateTest extends TestCase
         $this->assertSame('', $ctx->getFieldName());
         $this->assertSame('email', $ctx2->getFieldName());
     }
+
+    #[Test]
 
     public function testContextWithParametersReturnsNewInstance(): void
     {

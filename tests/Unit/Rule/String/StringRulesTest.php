@@ -7,14 +7,25 @@ namespace KaririCode\Transformer\Tests\Unit\Rule\String;
 use KaririCode\Transformer\Core\TransformationContextImpl;
 use KaririCode\Transformer\Contract\TransformationContext;
 use KaririCode\Transformer\Rule\String\{CamelCaseRule, SnakeCaseRule, KebabCaseRule, PascalCaseRule, MaskRule, ReverseRule, RepeatRule};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(\KaririCode\Transformer\Rule\String\CamelCaseRule::class)]
+#[CoversClass(\KaririCode\Transformer\Rule\String\SnakeCaseRule::class)]
+#[CoversClass(\KaririCode\Transformer\Rule\String\KebabCaseRule::class)]
+#[CoversClass(\KaririCode\Transformer\Rule\String\PascalCaseRule::class)]
+#[CoversClass(\KaririCode\Transformer\Rule\String\MaskRule::class)]
+#[CoversClass(\KaririCode\Transformer\Rule\String\ReverseRule::class)]
+#[CoversClass(\KaririCode\Transformer\Rule\String\RepeatRule::class)]
 final class StringRulesTest extends TestCase
 {
     private function ctx(array $params = []): TransformationContext
     {
         return TransformationContextImpl::create([])->withField('test')->withParameters($params);
     }
+
+    #[Test]
 
     public function testCamelCase(): void
     {
@@ -25,6 +36,8 @@ final class StringRulesTest extends TestCase
         $this->assertSame(42, $rule->transform(42, $this->ctx()));
     }
 
+    #[Test]
+
     public function testSnakeCase(): void
     {
         $rule = new SnakeCaseRule();
@@ -33,12 +46,16 @@ final class StringRulesTest extends TestCase
         $this->assertSame('hello_world', $rule->transform('Hello World', $this->ctx()));
     }
 
+    #[Test]
+
     public function testKebabCase(): void
     {
         $rule = new KebabCaseRule();
         $this->assertSame('hello-world', $rule->transform('helloWorld', $this->ctx()));
         $this->assertSame('hello-world', $rule->transform('Hello World', $this->ctx()));
     }
+
+    #[Test]
 
     public function testPascalCase(): void
     {
@@ -47,12 +64,16 @@ final class StringRulesTest extends TestCase
         $this->assertSame('HelloWorld', $rule->transform('hello-world', $this->ctx()));
     }
 
+    #[Test]
+
     public function testMask(): void
     {
         $rule = new MaskRule();
         $this->assertSame('529*****725', $rule->transform('52998224725', $this->ctx(['keep_start' => 3, 'keep_end' => 3])));
         $this->assertSame('ab', $rule->transform('ab', $this->ctx(['keep_start' => 3, 'keep_end' => 3]))); // too short
     }
+
+    #[Test]
 
     public function testReverse(): void
     {
@@ -61,12 +82,16 @@ final class StringRulesTest extends TestCase
         $this->assertSame('oluaP oãS', $rule->transform('São Paulo', $this->ctx()));
     }
 
+    #[Test]
+
     public function testRepeat(): void
     {
         $rule = new RepeatRule();
         $this->assertSame('abab', $rule->transform('ab', $this->ctx(['times' => 2])));
         $this->assertSame('ab-ab-ab', $rule->transform('ab', $this->ctx(['times' => 3, 'separator' => '-'])));
     }
+
+    #[Test]
 
     public function testGetName(): void
     {

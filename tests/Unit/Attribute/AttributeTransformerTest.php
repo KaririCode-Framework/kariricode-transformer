@@ -6,10 +6,15 @@ namespace KaririCode\Transformer\Tests\Unit\Attribute;
 
 use KaririCode\Transformer\Attribute\Transform;
 use KaririCode\Transformer\Provider\TransformerServiceProvider;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(\KaririCode\Transformer\Core\AttributeTransformer::class)]
+#[CoversClass(\KaririCode\Transformer\Core\TransformAttributeHandler::class)]
 final class AttributeTransformerTest extends TestCase
 {
+    #[Test]
     public function testTransformDtoViaAttributes(): void
     {
         $dto = new class {
@@ -30,6 +35,8 @@ final class AttributeTransformerTest extends TestCase
         $this->assertSame('no rules', $dto->untouched);
         $this->assertTrue($result->wasTransformed());
     }
+
+    #[Test]
 
     public function testMultipleAttributes(): void
     {

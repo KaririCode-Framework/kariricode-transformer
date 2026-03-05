@@ -7,14 +7,23 @@ namespace KaririCode\Transformer\Tests\Unit\Rule\Structure;
 use KaririCode\Transformer\Core\TransformationContextImpl;
 use KaririCode\Transformer\Contract\TransformationContext;
 use KaririCode\Transformer\Rule\Structure\{FlattenRule, UnflattenRule, PluckRule, GroupByRule, RenameKeysRule};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(\KaririCode\Transformer\Rule\Structure\FlattenRule::class)]
+#[CoversClass(\KaririCode\Transformer\Rule\Structure\UnflattenRule::class)]
+#[CoversClass(\KaririCode\Transformer\Rule\Structure\PluckRule::class)]
+#[CoversClass(\KaririCode\Transformer\Rule\Structure\GroupByRule::class)]
+#[CoversClass(\KaririCode\Transformer\Rule\Structure\RenameKeysRule::class)]
 final class StructureRulesTest extends TestCase
 {
     private function ctx(array $params = []): TransformationContext
     {
         return TransformationContextImpl::create([])->withField('test')->withParameters($params);
     }
+
+    #[Test]
 
     public function testFlatten(): void
     {
@@ -25,6 +34,8 @@ final class StructureRulesTest extends TestCase
         $this->assertSame(['a.b.c' => 1, 'a.d' => 2, 'e' => 3], $result);
     }
 
+    #[Test]
+
     public function testFlattenCustomSeparator(): void
     {
         $result = (new FlattenRule())->transform(
@@ -33,6 +44,8 @@ final class StructureRulesTest extends TestCase
         );
         $this->assertSame(['a/b' => 1], $result);
     }
+
+    #[Test]
 
     public function testUnflatten(): void
     {
@@ -43,12 +56,16 @@ final class StructureRulesTest extends TestCase
         $this->assertSame(['a' => ['b' => ['c' => 1], 'd' => 2], 'e' => 3], $result);
     }
 
+    #[Test]
+
     public function testPluck(): void
     {
         $data = [['id' => 1, 'name' => 'Alice'], ['id' => 2, 'name' => 'Bob']];
         $result = (new PluckRule())->transform($data, $this->ctx(['field' => 'name']));
         $this->assertSame(['Alice', 'Bob'], $result);
     }
+
+    #[Test]
 
     public function testGroupBy(): void
     {
@@ -63,6 +80,8 @@ final class StructureRulesTest extends TestCase
         $this->assertCount(1, $result['hr']);
     }
 
+    #[Test]
+
     public function testRenameKeys(): void
     {
         $data = ['first_name' => 'Walmir', 'last_name' => 'Silva'];
@@ -71,6 +90,8 @@ final class StructureRulesTest extends TestCase
         );
         $this->assertSame(['firstName' => 'Walmir', 'lastName' => 'Silva'], $result);
     }
+
+    #[Test]
 
     public function testGetName(): void
     {

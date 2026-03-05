@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace KaririCode\Transformer\Tests\Conformance;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(\KaririCode\Transformer\Core\TransformerEngine::class)]
 final class ArchitecturalContractTest extends TestCase
 {
     private const RULE_CLASSES = [
@@ -43,6 +46,8 @@ final class ArchitecturalContractTest extends TestCase
         \KaririCode\Transformer\Rule\Encoding\HashRule::class,
     ];
 
+    #[Test]
+
     public function testAllRulesAreFinalReadonly(): void
     {
         foreach (self::RULE_CLASSES as $class) {
@@ -51,6 +56,8 @@ final class ArchitecturalContractTest extends TestCase
             $this->assertTrue($ref->isReadOnly(), "{$class} must be readonly");
         }
     }
+
+    #[Test]
 
     public function testAllRulesImplementContract(): void
     {
@@ -61,6 +68,8 @@ final class ArchitecturalContractTest extends TestCase
             );
         }
     }
+
+    #[Test]
 
     public function testRuleCount(): void
     {
