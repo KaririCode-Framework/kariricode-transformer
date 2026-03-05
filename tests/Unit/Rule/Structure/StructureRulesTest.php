@@ -89,10 +89,15 @@ final class StructureRulesTest extends TestCase
     #[Test]
     public function testGetName(): void
     {
-        $this->assertSame('structure.flatten', (new FlattenRule())->getName());
-        $this->assertSame('structure.pluck', (new PluckRule())->getName());
-        $this->assertSame('structure.group_by', (new GroupByRule())->getName());
-        $this->assertSame('structure.rename_keys', (new RenameKeysRule())->getName());
-        $this->assertSame('structure.unflatten', (new UnflattenRule())->getName());
+        $rule = new FlattenRule();
+        $this->assertSame('structure.flatten', $rule->getName());
+        $rule = new PluckRule();
+        $this->assertSame('structure.pluck', $rule->getName());
+        $rule = new GroupByRule();
+        $this->assertSame('structure.group_by', $rule->getName());
+        $rule = new RenameKeysRule();
+        $this->assertSame('structure.rename_keys', $rule->getName());
+        $rule = new UnflattenRule();
+        $this->assertSame('structure.unflatten', $rule->getName());
     }
 }

@@ -88,12 +88,19 @@ final class StringRulesTest extends TestCase
     public function testGetName(): void
     {
         // String rules
-        $this->assertSame('string.camel_case', (new CamelCaseRule())->getName());
-        $this->assertSame('string.snake_case', (new SnakeCaseRule())->getName());
-        $this->assertSame('string.kebab_case', (new KebabCaseRule())->getName());
-        $this->assertSame('string.pascal_case', (new PascalCaseRule())->getName());
-        $this->assertSame('string.mask', (new MaskRule())->getName());
-        $this->assertSame('string.reverse', (new ReverseRule())->getName());
-        $this->assertSame('string.repeat', (new RepeatRule())->getName());
+        $rule = new CamelCaseRule();
+        $this->assertSame('string.camel_case', $rule->getName());
+        $rule = new SnakeCaseRule();
+        $this->assertSame('string.snake_case', $rule->getName());
+        $rule = new KebabCaseRule();
+        $this->assertSame('string.kebab_case', $rule->getName());
+        $rule = new PascalCaseRule();
+        $this->assertSame('string.pascal_case', $rule->getName());
+        $rule = new MaskRule();
+        $this->assertSame('string.mask', $rule->getName());
+        $rule = new ReverseRule();
+        $this->assertSame('string.reverse', $rule->getName());
+        $rule = new RepeatRule();
+        $this->assertSame('string.repeat', $rule->getName());
     }
 }

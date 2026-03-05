@@ -155,7 +155,7 @@ final class DateRulesTest extends TestCase
     public function testRelativeDateUsesDefaultNow(): void
     {
         // No 'now' param provided — uses PHP's current time
-        $recent = (new \DateTimeImmutable())->modify('-2 minutes')->format('Y-m-d H:i:s');
+        $recent = new \DateTimeImmutable()->modify('-2 minutes')->format('Y-m-d H:i:s');
         $result = new RelativeDateRule()->transform($recent, $this->ctx());
         $this->assertStringContainsString('minute', $result);
     }
@@ -163,7 +163,9 @@ final class DateRulesTest extends TestCase
     #[Test]
     public function testGetName(): void
     {
-        $this->assertSame('date.to_iso8601', (new DateToIso8601Rule())->getName());
-        $this->assertSame('date.relative', (new RelativeDateRule())->getName());
+        $rule = new DateToIso8601Rule();
+        $this->assertSame('date.to_iso8601', $rule->getName());
+        $rule = new RelativeDateRule();
+        $this->assertSame('date.relative', $rule->getName());
     }
 }

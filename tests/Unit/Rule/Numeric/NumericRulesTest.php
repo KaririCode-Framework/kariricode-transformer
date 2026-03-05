@@ -67,6 +67,7 @@ final class NumericRulesTest extends TestCase
     #[Test]
     public function testGetName(): void
     {
-        $this->assertSame('numeric.currency_format', (new CurrencyFormatRule())->getName());
+        $rule = new CurrencyFormatRule();
+        $this->assertSame('numeric.currency_format', $rule->getName());
     }
 }

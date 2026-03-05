@@ -71,9 +71,13 @@ final class BrazilianRulesTest extends TestCase
     #[Test]
     public function testGetName(): void
     {
-        $this->assertSame('brazilian.cpf_to_digits', (new CpfToDigitsRule())->getName());
-        $this->assertSame('brazilian.cnpj_to_digits', (new CnpjToDigitsRule())->getName());
-        $this->assertSame('brazilian.cep_to_digits', (new CepToDigitsRule())->getName());
-        $this->assertSame('brazilian.phone_format', (new PhoneFormatRule())->getName());
+        $rule = new CpfToDigitsRule();
+        $this->assertSame('brazilian.cpf_to_digits', $rule->getName());
+        $rule = new CnpjToDigitsRule();
+        $this->assertSame('brazilian.cnpj_to_digits', $rule->getName());
+        $rule = new CepToDigitsRule();
+        $this->assertSame('brazilian.cep_to_digits', $rule->getName());
+        $rule = new PhoneFormatRule();
+        $this->assertSame('brazilian.phone_format', $rule->getName());
     }
 }

@@ -77,8 +77,11 @@ final class DataRulesTest extends TestCase
     #[Test]
     public function testGetName(): void
     {
-        $this->assertSame('data.csv_to_array', (new CsvToArrayRule())->getName());
-        $this->assertSame('data.json_encode', (new JsonEncodeRule())->getName());
-        $this->assertSame('data.implode', (new ImplodeRule())->getName());
+        $rule = new CsvToArrayRule();
+        $this->assertSame('data.csv_to_array', $rule->getName());
+        $rule = new JsonEncodeRule();
+        $this->assertSame('data.json_encode', $rule->getName());
+        $rule = new ImplodeRule();
+        $this->assertSame('data.implode', $rule->getName());
     }
 }
