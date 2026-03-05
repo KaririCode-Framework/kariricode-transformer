@@ -67,4 +67,16 @@ final class StringRulesTest extends TestCase
         $this->assertSame('abab', $rule->transform('ab', $this->ctx(['times' => 2])));
         $this->assertSame('ab-ab-ab', $rule->transform('ab', $this->ctx(['times' => 3, 'separator' => '-'])));
     }
+
+    public function testGetName(): void
+    {
+        // String rules
+        $this->assertIsString((new \KaririCode\Transformer\Rule\String\CamelCaseRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\String\SnakeCaseRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\String\KebabCaseRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\String\PascalCaseRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\String\MaskRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\String\ReverseRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\String\RepeatRule())->getName());
+    }
 }

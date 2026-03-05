@@ -48,4 +48,11 @@ final class EncodingRulesTest extends TestCase
         $this->assertSame(42, (new Base64EncodeRule())->transform(42, $this->ctx()));
         $this->assertSame([], (new HashRule())->transform([], $this->ctx()));
     }
+
+    public function testGetName(): void
+    {
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Encoding\Base64EncodeRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Encoding\Base64DecodeRule())->getName());
+        $this->assertIsString((new HashRule())->getName());
+    }
 }

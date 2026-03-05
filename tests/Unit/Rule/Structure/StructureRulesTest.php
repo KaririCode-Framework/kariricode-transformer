@@ -71,4 +71,13 @@ final class StructureRulesTest extends TestCase
         );
         $this->assertSame(['firstName' => 'Walmir', 'lastName' => 'Silva'], $result);
     }
+
+    public function testGetName(): void
+    {
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Structure\FlattenRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Structure\PluckRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Structure\GroupByRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Structure\RenameKeysRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Structure\UnflattenRule())->getName());
+    }
 }

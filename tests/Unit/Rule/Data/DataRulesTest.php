@@ -57,4 +57,13 @@ final class DataRulesTest extends TestCase
         $this->assertSame('a|b', (new ImplodeRule())->transform(['a', 'b'], $this->ctx(['separator' => '|'])));
         $this->assertSame('hello', (new ImplodeRule())->transform('hello', $this->ctx())); // non-array
     }
+
+    public function testGetName(): void
+    {
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Data\CsvToArrayRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Data\JsonEncodeRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Data\JsonDecodeRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Data\ImplodeRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Data\ArrayToKeyValueRule())->getName());
+    }
 }

@@ -67,4 +67,12 @@ final class DateRulesTest extends TestCase
     {
         $this->assertSame('invalid', (new AgeRule())->transform('invalid', $this->ctx()));
     }
+
+    public function testGetName(): void
+    {
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Date\DateToIso8601Rule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Date\DateToTimestampRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Date\RelativeDateRule())->getName());
+        $this->assertIsString((new AgeRule())->getName());
+    }
 }

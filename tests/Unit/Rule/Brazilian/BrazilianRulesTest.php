@@ -54,4 +54,12 @@ final class BrazilianRulesTest extends TestCase
         $this->assertSame(42, (new CpfToDigitsRule())->transform(42, $ctx));
         $this->assertSame(null, (new CnpjToDigitsRule())->transform(null, $ctx));
     }
+
+    public function testGetName(): void
+    {
+        $this->assertIsString((new CpfToDigitsRule())->getName());
+        $this->assertIsString((new CnpjToDigitsRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Brazilian\CepToDigitsRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Brazilian\PhoneFormatRule())->getName());
+    }
 }

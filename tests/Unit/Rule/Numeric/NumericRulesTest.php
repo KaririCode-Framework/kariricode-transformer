@@ -55,4 +55,12 @@ final class NumericRulesTest extends TestCase
         $this->assertSame('two hundred and forty-two', $rule->transform(242, $this->ctx()));
         $this->assertSame(1000, $rule->transform(1000, $this->ctx())); // out of range
     }
+
+    public function testGetName(): void
+    {
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Numeric\CurrencyFormatRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Numeric\PercentageRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Numeric\OrdinalRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Numeric\NumberToWordsRule())->getName());
+    }
 }
