@@ -28,6 +28,10 @@ Thumbs.db
 
 # Arquivos e pastas de ambientes virtuais
 .env
+.env.example
+.docs/
+.php-cs-fixer.php
+
 
 # Arquivos de cache
 /cache/
@@ -63,5 +67,7 @@ tests/lista_de_arquivos.php
 tests/lista_de_arquivos_test.php
 lista_de_arquivos.txt
 lista_de_arquivos_tests.txt
-test_files_generate.php
-/composer.lock
+add_static_to_providers.php
+
+# KaririCode Devkit — generated configs and build artifacts
+.kcode/
