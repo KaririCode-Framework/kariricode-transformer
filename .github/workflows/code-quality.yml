@@ -98,6 +98,12 @@ jobs:
       - name: Initialize devkit
         run: kcode init
 
+      # Patch generated phpunit.xml.dist — beStrictAboutCoverageMetadata causes false
+      # "not a valid target" warnings for classes extending vendor base classes
+      - name: Patch phpunit.xml.dist
+        run: |
+          sed -i 's/beStrictAboutCoverageMetadata="true"/beStrictAboutCoverageMetadata="false"/' .kcode/phpunit.xml.dist
+
       # Runs PHPStan Level 9 then Psalm sequentially — both must pass
       - name: Run PHPStan + Psalm via kcode
         run: kcode analyse
@@ -167,6 +173,12 @@ jobs:
       - name: Initialize devkit
         run: kcode init
 
+      # Patch generated phpunit.xml.dist — beStrictAboutCoverageMetadata causes false
+      # "not a valid target" warnings for classes extending vendor base classes
+      - name: Patch phpunit.xml.dist
+        run: |
+          sed -i 's/beStrictAboutCoverageMetadata="true"/beStrictAboutCoverageMetadata="false"/' .kcode/phpunit.xml.dist
+
       - name: Run tests with coverage (pcov)
         run: kcode test --coverage
 
@@ -194,7 +206,10 @@ jobs:
           echo "| Code Style (CS Fixer) | ${{ needs.cs-fixer.result }} |" >> "$GITHUB_STEP_SUMMARY"
           echo "| PHPUnit Tests (pcov) | ${{ needs.tests.result }} |" >> "$GITHUB_STEP_SUMMARY"
 
-          if [ "${{ needs.security.result }}" != "success" ] ||              [ "${{ needs.analyse.result }}" != "success" ] ||              [ "${{ needs.cs-fixer.result }}" != "success" ] ||              [ "${{ needs.tests.result }}" != "success" ]; then
+          if [ "${{ needs.security.result }}" != "success" ] || \
+             [ "${{ needs.analyse.result }}" != "success" ] || \
+             [ "${{ needs.cs-fixer.result }}" != "success" ] || \
+             [ "${{ needs.tests.result }}" != "success" ]; then
             echo "" >> "$GITHUB_STEP_SUMMARY"
             echo "❌ One or more quality gates failed. Merge blocked." >> "$GITHUB_STEP_SUMMARY"
             exit 1
