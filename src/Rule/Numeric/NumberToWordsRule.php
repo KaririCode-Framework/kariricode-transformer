@@ -17,28 +17,39 @@ use KaririCode\Transformer\Contract\TransformationRule;
  */
 final readonly class NumberToWordsRule implements TransformationRule
 {
-    private const ONES = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
+    private const array ONES = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
         'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
-    private const TENS = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+    private const array TENS = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
 
+    #[\Override]
     public function transform(mixed $value, TransformationContext $context): mixed
     {
-        if (!is_int($value) && !(is_string($value) && ctype_digit($value))) { return $value; }
+        if (! \is_int($value) && ! (\is_string($value) && ctype_digit($value))) {
+            return $value;
+        }
 
         $n = (int) $value;
-        if ($n < 0 || $n > 999) { return $value; }
-        if ($n === 0) { return 'zero'; }
+        if ($n < 0 || $n > 999) {
+            return $value;
+        }
+        if ($n === 0) {
+            return 'zero';
+        }
 
         $words = '';
         if ($n >= 100) {
             $words .= self::ONES[(int) ($n / 100)] . ' hundred';
             $n %= 100;
-            if ($n > 0) { $words .= ' and '; }
+            if ($n > 0) {
+                $words .= ' and ';
+            }
         }
         if ($n >= 20) {
             $words .= self::TENS[(int) ($n / 10)];
             $n %= 10;
-            if ($n > 0) { $words .= '-' . self::ONES[$n]; }
+            if ($n > 0) {
+                $words .= '-' . self::ONES[$n];
+            }
         } elseif ($n > 0) {
             $words .= self::ONES[$n];
         }
@@ -46,5 +57,9 @@ final readonly class NumberToWordsRule implements TransformationRule
         return $words;
     }
 
-    public function getName(): string { return 'numeric.number_to_words'; }
+    #[\Override]
+    public function getName(): string
+    {
+        return 'numeric.number_to_words';
+    }
 }

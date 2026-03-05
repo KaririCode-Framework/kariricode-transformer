@@ -21,7 +21,7 @@ final class TransformationResultTest extends TestCase
 
     public function testWasTransformed(): void
     {
-        $changed   = new TransformationResult(['x' => 1], ['x' => 2]);
+        $changed = new TransformationResult(['x' => 1], ['x' => 2]);
         $unchanged = new TransformationResult(['x' => 1], ['x' => 1]);
         $this->assertTrue($changed->wasTransformed());
         $this->assertFalse($unchanged->wasTransformed());
@@ -88,7 +88,7 @@ final class TransformationResultTest extends TestCase
 
     public function testFieldTransformationWasTransformed(): void
     {
-        $changed   = new FieldTransformation('x', 'rule', 'a', 'b');
+        $changed = new FieldTransformation('x', 'rule', 'a', 'b');
         $unchanged = new FieldTransformation('x', 'rule', 'x', 'x');
         $this->assertTrue($changed->wasTransformed());
         $this->assertFalse($unchanged->wasTransformed());

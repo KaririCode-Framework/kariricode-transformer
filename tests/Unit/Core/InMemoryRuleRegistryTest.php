@@ -11,8 +11,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(\KaririCode\Transformer\Core\InMemoryRuleRegistry::class)]
-#[CoversClass(\KaririCode\Transformer\Exception\InvalidRuleException::class)]
+#[CoversClass(InMemoryRuleRegistry::class)]
+#[CoversClass(InvalidRuleException::class)]
 final class InMemoryRuleRegistryTest extends TestCase
 {
     #[Test]
@@ -26,7 +26,6 @@ final class InMemoryRuleRegistryTest extends TestCase
     }
 
     #[Test]
-
     public function testDuplicateThrows(): void
     {
         $registry = new InMemoryRuleRegistry();
@@ -36,10 +35,9 @@ final class InMemoryRuleRegistryTest extends TestCase
     }
 
     #[Test]
-
     public function testUnknownThrows(): void
     {
         $this->expectException(InvalidRuleException::class);
-        (new InMemoryRuleRegistry())->resolve('unknown');
+        new InMemoryRuleRegistry()->resolve('unknown');
     }
 }

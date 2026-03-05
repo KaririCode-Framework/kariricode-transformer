@@ -17,12 +17,20 @@ use KaririCode\Transformer\Contract\TransformationRule;
  */
 final readonly class CepToDigitsRule implements TransformationRule
 {
+    #[\Override]
     public function transform(mixed $value, TransformationContext $context): mixed
     {
-        if (!is_string($value)) { return $value; }
+        if (! \is_string($value)) {
+            return $value;
+        }
         $digits = preg_replace('/\D/', '', $value) ?? '';
-        return strlen($digits) === 8 ? $digits : $value;
+
+        return \strlen($digits) === 8 ? $digits : $value;
     }
 
-    public function getName(): string { return 'brazilian.cep_to_digits'; }
+    #[\Override]
+    public function getName(): string
+    {
+        return 'brazilian.cep_to_digits';
+    }
 }

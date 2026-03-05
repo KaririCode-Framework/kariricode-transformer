@@ -18,19 +18,20 @@ use KaririCode\Transformer\Contract\TransformationRule;
  */
 final readonly class CsvToArrayRule implements TransformationRule
 {
+    #[\Override]
     public function transform(mixed $value, TransformationContext $context): mixed
     {
-        if (!is_string($value)) {
+        if (! \is_string($value)) {
             return $value;
         }
 
-        $separator = (string) $context->getParameter('separator', ',');
-        $enclosure = (string) $context->getParameter('enclosure', '"');
-        $hasHeader = (bool) $context->getParameter('header', true);
+        $separator = (\is_string($_p = $context->getParameter('separator', ',')) ? $_p : '');
+        $enclosure = (\is_string($_p = $context->getParameter('enclosure', '"')) ? $_p : '');
+        $hasHeader = (\is_bool($_p = $context->getParameter('header', true)) && $_p);
 
         $lines = array_filter(
             explode("\n", str_replace("\r\n", "\n", $value)),
-            static fn (string $l) => trim($l) !== '',
+            static fn (string $l): bool => trim($l) !== '',
         );
 
         if ($lines === []) {
@@ -38,14 +39,17 @@ final readonly class CsvToArrayRule implements TransformationRule
         }
 
         $rows = array_map(
-            static fn (string $line) => str_getcsv($line, $separator, $enclosure, escape: '\\'),
+            static fn (string $line): array => str_getcsv($line, $separator, $enclosure, escape: '\\'),
             $lines,
         );
 
-        if ($hasHeader && count($rows) > 1) {
+        if ($hasHeader && \count($rows) > 1) {
             $headers = array_shift($rows);
+            /** @var list<string> $headers */
+            $headers = array_map(static fn (mixed $h): string => (string) $h, $headers);
+
             return array_map(
-                static fn (array $row) => array_combine($headers, array_pad($row, count($headers), '')),
+                static fn (array $row): array => array_combine($headers, array_pad($row, \count($headers), '')),
                 $rows,
             );
         }
@@ -53,6 +57,7 @@ final readonly class CsvToArrayRule implements TransformationRule
         return $rows;
     }
 
+    #[\Override]
     public function getName(): string
     {
         return 'data.csv_to_array';

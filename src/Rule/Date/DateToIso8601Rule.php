@@ -17,15 +17,21 @@ use KaririCode\Transformer\Contract\TransformationRule;
  */
 final readonly class DateToIso8601Rule implements TransformationRule
 {
+    #[\Override]
     public function transform(mixed $value, TransformationContext $context): mixed
     {
-        if (!is_string($value) || trim($value) === '') { return $value; }
+        if (! \is_string($value) || trim($value) === '') {
+            return $value;
+        }
 
-        $from = (string) $context->getParameter('from', 'd/m/Y');
-        $tz = (string) $context->getParameter('timezone', 'UTC');
+        $from = (\is_string($_p = $context->getParameter('from', 'd/m/Y')) ? $_p : 'd/m/Y');
+        $tzRaw = (\is_string($_p = $context->getParameter('timezone', 'UTC')) ? $_p : 'UTC');
+        $tz = $tzRaw !== '' ? $tzRaw : 'UTC';
 
         $date = \DateTimeImmutable::createFromFormat($from, $value);
-        if ($date === false) { return $value; }
+        if ($date === false) {
+            return $value;
+        }
 
         try {
             return $date->setTimezone(new \DateTimeZone($tz))->format(\DateTimeInterface::ATOM);
@@ -34,5 +40,9 @@ final readonly class DateToIso8601Rule implements TransformationRule
         }
     }
 
-    public function getName(): string { return 'date.to_iso8601'; }
+    #[\Override]
+    public function getName(): string
+    {
+        return 'date.to_iso8601';
+    }
 }

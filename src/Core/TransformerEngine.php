@@ -20,12 +20,13 @@ use KaririCode\Transformer\Result\TransformationResult;
  * @author  Walmir Silva <walmir.silva@kariricode.org>
  * @since   3.1.0 ARFA 1.3
  */
-final class TransformerEngine
+final readonly class TransformerEngine
 {
     public function __construct(
-        private readonly RuleRegistry $registry,
-        private readonly ?TransformerConfiguration $configuration = null,
-    ) {}
+        private RuleRegistry $registry,
+        private ?TransformerConfiguration $configuration = null,
+    ) {
+    }
 
     /**
      * @param array<string, mixed> $data
@@ -59,34 +60,40 @@ final class TransformerEngine
         return $result;
     }
 
+    /** @param array<string, mixed> $data */
     private function resolveValue(array $data, string $field): mixed
     {
-        if (array_key_exists($field, $data)) {
+        if (\array_key_exists($field, $data)) {
             return $data[$field];
         }
         $segments = explode('.', $field);
         $current = $data;
         foreach ($segments as $segment) {
-            if (!is_array($current) || !array_key_exists($segment, $current)) {
+            if (! \is_array($current) || ! \array_key_exists($segment, $current)) {
                 return null;
             }
             $current = $current[$segment];
         }
+
         return $current;
     }
 
-    /** @return array{0: TransformationRule, 1: array<string, mixed>} */
+    /**
+     * @param string|array{0: string|TransformationRule, 1: array<string, mixed>}|TransformationRule $definition
+     * @return array{0: TransformationRule, 1: array<string, mixed>}
+     */
     private function resolveRule(string|array|TransformationRule $definition): array
     {
         if ($definition instanceof TransformationRule) {
             return [$definition, []];
         }
-        if (is_string($definition)) {
+        if (\is_string($definition)) {
             return [$this->registry->resolve($definition), []];
         }
         $ruleRef = $definition[0];
         $params = $definition[1] ?? [];
         $rule = $ruleRef instanceof TransformationRule ? $ruleRef : $this->registry->resolve($ruleRef);
+
         return [$rule, $params];
     }
 }

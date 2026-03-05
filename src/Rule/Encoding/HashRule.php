@@ -17,12 +17,20 @@ use KaririCode\Transformer\Contract\TransformationRule;
  */
 final readonly class HashRule implements TransformationRule
 {
+    #[\Override]
     public function transform(mixed $value, TransformationContext $context): mixed
     {
-        if (!is_string($value)) { return $value; }
-        $algo = (string) $context->getParameter('algo', 'sha256');
+        if (! \is_string($value)) {
+            return $value;
+        }
+        $algo = (\is_string($_p = $context->getParameter('algo', 'sha256')) ? $_p : '');
+
         return hash($algo, $value);
     }
 
-    public function getName(): string { return 'encoding.hash'; }
+    #[\Override]
+    public function getName(): string
+    {
+        return 'encoding.hash';
+    }
 }

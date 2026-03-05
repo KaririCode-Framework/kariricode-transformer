@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace KaririCode\Transformer\Tests\Unit\Rule\String;
 
-use KaririCode\Transformer\Core\TransformationContextImpl;
 use KaririCode\Transformer\Contract\TransformationContext;
-use KaririCode\Transformer\Rule\String\{CamelCaseRule, SnakeCaseRule, KebabCaseRule, PascalCaseRule, MaskRule, ReverseRule, RepeatRule};
+use KaririCode\Transformer\Core\TransformationContextImpl;
+use KaririCode\Transformer\Rule\String\{CamelCaseRule, KebabCaseRule, MaskRule, PascalCaseRule, RepeatRule, ReverseRule, SnakeCaseRule};
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(\KaririCode\Transformer\Rule\String\CamelCaseRule::class)]
-#[CoversClass(\KaririCode\Transformer\Rule\String\SnakeCaseRule::class)]
-#[CoversClass(\KaririCode\Transformer\Rule\String\KebabCaseRule::class)]
-#[CoversClass(\KaririCode\Transformer\Rule\String\PascalCaseRule::class)]
-#[CoversClass(\KaririCode\Transformer\Rule\String\MaskRule::class)]
-#[CoversClass(\KaririCode\Transformer\Rule\String\ReverseRule::class)]
-#[CoversClass(\KaririCode\Transformer\Rule\String\RepeatRule::class)]
+#[CoversClass(CamelCaseRule::class)]
+#[CoversClass(SnakeCaseRule::class)]
+#[CoversClass(KebabCaseRule::class)]
+#[CoversClass(PascalCaseRule::class)]
+#[CoversClass(MaskRule::class)]
+#[CoversClass(ReverseRule::class)]
+#[CoversClass(RepeatRule::class)]
 final class StringRulesTest extends TestCase
 {
     private function ctx(array $params = []): TransformationContext
@@ -26,7 +26,6 @@ final class StringRulesTest extends TestCase
     }
 
     #[Test]
-
     public function testCamelCase(): void
     {
         $rule = new CamelCaseRule();
@@ -37,7 +36,6 @@ final class StringRulesTest extends TestCase
     }
 
     #[Test]
-
     public function testSnakeCase(): void
     {
         $rule = new SnakeCaseRule();
@@ -47,7 +45,6 @@ final class StringRulesTest extends TestCase
     }
 
     #[Test]
-
     public function testKebabCase(): void
     {
         $rule = new KebabCaseRule();
@@ -56,7 +53,6 @@ final class StringRulesTest extends TestCase
     }
 
     #[Test]
-
     public function testPascalCase(): void
     {
         $rule = new PascalCaseRule();
@@ -65,7 +61,6 @@ final class StringRulesTest extends TestCase
     }
 
     #[Test]
-
     public function testMask(): void
     {
         $rule = new MaskRule();
@@ -74,7 +69,6 @@ final class StringRulesTest extends TestCase
     }
 
     #[Test]
-
     public function testReverse(): void
     {
         $rule = new ReverseRule();
@@ -83,7 +77,6 @@ final class StringRulesTest extends TestCase
     }
 
     #[Test]
-
     public function testRepeat(): void
     {
         $rule = new RepeatRule();
@@ -92,16 +85,22 @@ final class StringRulesTest extends TestCase
     }
 
     #[Test]
-
     public function testGetName(): void
     {
         // String rules
-        $this->assertIsString((new \KaririCode\Transformer\Rule\String\CamelCaseRule())->getName());
-        $this->assertIsString((new \KaririCode\Transformer\Rule\String\SnakeCaseRule())->getName());
-        $this->assertIsString((new \KaririCode\Transformer\Rule\String\KebabCaseRule())->getName());
-        $this->assertIsString((new \KaririCode\Transformer\Rule\String\PascalCaseRule())->getName());
-        $this->assertIsString((new \KaririCode\Transformer\Rule\String\MaskRule())->getName());
-        $this->assertIsString((new \KaririCode\Transformer\Rule\String\ReverseRule())->getName());
-        $this->assertIsString((new \KaririCode\Transformer\Rule\String\RepeatRule())->getName());
+        $rule = new CamelCaseRule();
+        $this->assertSame('string.camel_case', $rule->getName());
+        $rule = new SnakeCaseRule();
+        $this->assertSame('string.snake_case', $rule->getName());
+        $rule = new KebabCaseRule();
+        $this->assertSame('string.kebab_case', $rule->getName());
+        $rule = new PascalCaseRule();
+        $this->assertSame('string.pascal_case', $rule->getName());
+        $rule = new MaskRule();
+        $this->assertSame('string.mask', $rule->getName());
+        $rule = new ReverseRule();
+        $this->assertSame('string.reverse', $rule->getName());
+        $rule = new RepeatRule();
+        $this->assertSame('string.repeat', $rule->getName());
     }
 }

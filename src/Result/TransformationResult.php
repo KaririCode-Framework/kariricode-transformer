@@ -16,27 +16,44 @@ final class TransformationResult
     /** @var list<FieldTransformation> */
     private array $transformations = [];
 
-    /** @param array<string, mixed> $originalData @param array<string, mixed> $transformedData */
+    /**
+     * @param array<string, mixed> $originalData
+     * @param array<string, mixed> $transformedData
+     */
     public function __construct(
         private readonly array $originalData,
         private array $transformedData,
-    ) {}
+    ) {
+    }
 
     /** @return array<string, mixed> */
-    public function getOriginalData(): array { return $this->originalData; }
+    public function getOriginalData(): array
+    {
+        return $this->originalData;
+    }
 
     /** @return array<string, mixed> */
-    public function getTransformedData(): array { return $this->transformedData; }
+    public function getTransformedData(): array
+    {
+        return $this->transformedData;
+    }
 
-    public function get(string $field): mixed { return $this->transformedData[$field] ?? null; }
+    public function get(string $field): mixed
+    {
+        return $this->transformedData[$field] ?? null;
+    }
 
-    public function wasTransformed(): bool { return $this->originalData !== $this->transformedData; }
+    public function wasTransformed(): bool
+    {
+        return $this->originalData !== $this->transformedData;
+    }
 
     public function isFieldTransformed(string $field): bool
     {
-        if (!array_key_exists($field, $this->originalData)) {
-            return array_key_exists($field, $this->transformedData);
+        if (! \array_key_exists($field, $this->originalData)) {
+            return \array_key_exists($field, $this->transformedData);
         }
+
         return ($this->originalData[$field] ?? null) !== ($this->transformedData[$field] ?? null);
     }
 
@@ -44,11 +61,12 @@ final class TransformationResult
     public function transformedFields(): array
     {
         $fields = [];
-        foreach ($this->transformedData as $field => $value) {
+        foreach (array_keys($this->transformedData) as $field) {
             if ($this->isFieldTransformed($field)) {
                 $fields[] = $field;
             }
         }
+
         return $fields;
     }
 
@@ -63,7 +81,10 @@ final class TransformationResult
     }
 
     /** @return list<FieldTransformation> */
-    public function getTransformations(): array { return $this->transformations; }
+    public function getTransformations(): array
+    {
+        return $this->transformations;
+    }
 
     /** @return list<FieldTransformation> */
     public function transformationsFor(string $field): array
@@ -76,7 +97,7 @@ final class TransformationResult
 
     public function transformationCount(): int
     {
-        return count(array_filter(
+        return \count(array_filter(
             $this->transformations,
             static fn (FieldTransformation $t): bool => $t->wasTransformed(),
         ));
@@ -91,6 +112,7 @@ final class TransformationResult
         foreach ([...$this->transformations, ...$other->transformations] as $t) {
             $merged->addTransformation($t);
         }
+
         return $merged;
     }
 }

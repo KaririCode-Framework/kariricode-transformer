@@ -17,7 +17,7 @@ final class TransformerEngineTest extends TestCase
     #[Test]
     public function testBasicTransformation(): void
     {
-        $engine = (new TransformerServiceProvider())->createEngine();
+        $engine = new TransformerServiceProvider()->createEngine();
         $result = $engine->transform(
             ['name' => 'hello_world', 'price' => 1234.5],
             ['name' => ['camel_case'], 'price' => [['currency_format', ['prefix' => 'R$ ', 'dec_point' => ',', 'thousands' => '.']]]],
@@ -29,7 +29,7 @@ final class TransformerEngineTest extends TestCase
     #[Test]
     public function testPipelineOrdering(): void
     {
-        $engine = (new TransformerServiceProvider())->createEngine();
+        $engine = new TransformerServiceProvider()->createEngine();
         $result = $engine->transform(
             ['field' => 'Hello World'],
             ['field' => ['snake_case', ['mask', ['keep_start' => 2, 'keep_end' => 2]]]],
@@ -40,7 +40,7 @@ final class TransformerEngineTest extends TestCase
     #[Test]
     public function testTransformationTracking(): void
     {
-        $engine = (new TransformerServiceProvider())->createEngine();
+        $engine = new TransformerServiceProvider()->createEngine();
         $result = $engine->transform(
             ['x' => 'hello_world', 'y' => 'untouched'],
             ['x' => ['camel_case'], 'y' => ['camel_case']],
@@ -53,7 +53,7 @@ final class TransformerEngineTest extends TestCase
     #[Test]
     public function testDotNotation(): void
     {
-        $engine = (new TransformerServiceProvider())->createEngine();
+        $engine = new TransformerServiceProvider()->createEngine();
         $result = $engine->transform(
             ['user' => ['name' => 'hello_world']],
             ['user.name' => ['pascal_case']],
@@ -64,7 +64,7 @@ final class TransformerEngineTest extends TestCase
     #[Test]
     public function testOriginalDataPreserved(): void
     {
-        $engine = (new TransformerServiceProvider())->createEngine();
+        $engine = new TransformerServiceProvider()->createEngine();
         $result = $engine->transform(['x' => 'abc'], ['x' => ['reverse']]);
         $this->assertSame('abc', $result->getOriginalData()['x']);
         $this->assertSame('cba', $result->getTransformedData()['x']);
@@ -73,7 +73,7 @@ final class TransformerEngineTest extends TestCase
     #[Test]
     public function testTransformationsLog(): void
     {
-        $engine = (new TransformerServiceProvider())->createEngine();
+        $engine = new TransformerServiceProvider()->createEngine();
         $result = $engine->transform(['x' => 'Hello World'], ['x' => ['snake_case', 'camel_case']]);
         $log = $result->transformationsFor('x');
         $this->assertCount(2, $log);
@@ -84,7 +84,7 @@ final class TransformerEngineTest extends TestCase
     #[Test]
     public function testDotNotationWithMissingKey(): void
     {
-        $engine = (new TransformerServiceProvider())->createEngine();
+        $engine = new TransformerServiceProvider()->createEngine();
         $result = $engine->transform(
             ['user' => ['age' => 25]],
             ['user.name' => ['camel_case']], // key doesn't exist — resolves to null
@@ -95,7 +95,7 @@ final class TransformerEngineTest extends TestCase
     #[Test]
     public function testResolveRuleWithInlineRuleObject(): void
     {
-        $engine = (new TransformerServiceProvider())->createEngine();
+        $engine = new TransformerServiceProvider()->createEngine();
         $rule = new SnakeCaseRule();
         $result = $engine->transform(
             ['name' => 'Hello World'],
@@ -107,7 +107,7 @@ final class TransformerEngineTest extends TestCase
     #[Test]
     public function testResolveRuleWithInlineRuleObjectAndParams(): void
     {
-        $engine = (new TransformerServiceProvider())->createEngine();
+        $engine = new TransformerServiceProvider()->createEngine();
         $rule = new SnakeCaseRule();
         $result = $engine->transform(
             ['name' => 'Hello World'],

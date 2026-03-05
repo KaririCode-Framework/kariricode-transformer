@@ -16,5 +16,6 @@ final readonly class TransformerConfiguration
     public function __construct(
         public bool $trackTransformations = true,
         public bool $preserveOriginal = true,
-    ) {}
+    ) {
+    }
 }

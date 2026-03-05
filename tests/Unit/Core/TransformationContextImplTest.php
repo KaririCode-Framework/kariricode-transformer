@@ -9,7 +9,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(\KaririCode\Transformer\Core\TransformationContextImpl::class)]
+#[CoversClass(TransformationContextImpl::class)]
 final class TransformationContextImplTest extends TestCase
 {
     #[Test]
@@ -22,7 +22,6 @@ final class TransformationContextImplTest extends TestCase
     }
 
     #[Test]
-
     public function testWithFieldReturnsNewInstance(): void
     {
         $ctx = TransformationContextImpl::create([]);
@@ -32,7 +31,6 @@ final class TransformationContextImplTest extends TestCase
     }
 
     #[Test]
-
     public function testWithParametersMerges(): void
     {
         $ctx = TransformationContextImpl::create([])

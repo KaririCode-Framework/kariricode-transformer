@@ -17,17 +17,26 @@ use KaririCode\Transformer\Contract\TransformationRule;
  */
 final readonly class PluckRule implements TransformationRule
 {
+    #[\Override]
     public function transform(mixed $value, TransformationContext $context): mixed
     {
-        if (!is_array($value)) { return $value; }
-        $field = (string) $context->getParameter('field', '');
-        if ($field === '') { return $value; }
+        if (! \is_array($value)) {
+            return $value;
+        }
+        $field = (\is_string($_p = $context->getParameter('field', '')) ? $_p : '');
+        if ($field === '') {
+            return $value;
+        }
 
         return array_values(array_map(
-            static fn (mixed $item): mixed => is_array($item) ? ($item[$field] ?? null) : null,
+            static fn (mixed $item): mixed => \is_array($item) ? ($item[$field] ?? null) : null,
             $value,
         ));
     }
 
-    public function getName(): string { return 'structure.pluck'; }
+    #[\Override]
+    public function getName(): string
+    {
+        return 'structure.pluck';
+    }
 }

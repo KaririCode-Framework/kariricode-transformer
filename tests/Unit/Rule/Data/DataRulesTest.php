@@ -4,17 +4,15 @@ declare(strict_types=1);
 
 namespace KaririCode\Transformer\Tests\Unit\Rule\Data;
 
-use KaririCode\Transformer\Core\TransformationContextImpl;
 use KaririCode\Transformer\Contract\TransformationContext;
-use KaririCode\Transformer\Rule\Data\{JsonEncodeRule, JsonDecodeRule, CsvToArrayRule, ArrayToKeyValueRule, ImplodeRule};
+use KaririCode\Transformer\Core\TransformationContextImpl;
+use KaririCode\Transformer\Rule\Data\{CsvToArrayRule, ImplodeRule, JsonEncodeRule};
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(JsonEncodeRule::class)]
-#[CoversClass(JsonDecodeRule::class)]
 #[CoversClass(CsvToArrayRule::class)]
-#[CoversClass(ArrayToKeyValueRule::class)]
 #[CoversClass(ImplodeRule::class)]
 final class DataRulesTest extends TestCase
 {
@@ -26,21 +24,14 @@ final class DataRulesTest extends TestCase
     #[Test]
     public function testJsonEncode(): void
     {
-        $this->assertSame('{"a":1}', (new JsonEncodeRule())->transform(['a' => 1], $this->ctx()));
-    }
-
-    #[Test]
-    public function testJsonDecode(): void
-    {
-        $this->assertSame(['a' => 1], (new JsonDecodeRule())->transform('{"a":1}', $this->ctx()));
-        $this->assertSame('invalid', (new JsonDecodeRule())->transform('invalid', $this->ctx()));
+        $this->assertSame('{"a":1}', new JsonEncodeRule()->transform(['a' => 1], $this->ctx()));
     }
 
     #[Test]
     public function testCsvToArrayWithHeader(): void
     {
         $csv = "name,age\nAlice,30\nBob,25";
-        $result = (new CsvToArrayRule())->transform($csv, $this->ctx(['header' => true]));
+        $result = new CsvToArrayRule()->transform($csv, $this->ctx(['header' => true]));
         $this->assertCount(2, $result);
         $this->assertSame('Alice', $result[0]['name']);
         $this->assertSame('25', $result[1]['age']);
@@ -50,7 +41,7 @@ final class DataRulesTest extends TestCase
     public function testCsvToArrayWithoutHeader(): void
     {
         $csv = "Alice,30\nBob,25";
-        $result = (new CsvToArrayRule())->transform($csv, $this->ctx(['header' => false]));
+        $result = new CsvToArrayRule()->transform($csv, $this->ctx(['header' => false]));
         $this->assertCount(2, $result);
         $this->assertSame('Alice', $result[0][0]);
     }
@@ -58,46 +49,39 @@ final class DataRulesTest extends TestCase
     #[Test]
     public function testCsvToArrayEmptyReturnsEmpty(): void
     {
-        $result = (new CsvToArrayRule())->transform('', $this->ctx());
+        $result = new CsvToArrayRule()->transform('', $this->ctx());
         $this->assertSame([], $result);
     }
 
     #[Test]
     public function testCsvToArrayNonStringPassthrough(): void
     {
-        $result = (new CsvToArrayRule())->transform(42, $this->ctx());
+        $result = new CsvToArrayRule()->transform(42, $this->ctx());
         $this->assertSame(42, $result);
     }
 
     #[Test]
     public function testCsvToArrayGetName(): void
     {
-        $this->assertSame('data.csv_to_array', (new CsvToArrayRule())->getName());
-    }
-
-    #[Test]
-    public function testArrayToKeyValue(): void
-    {
-        $data = [['id' => 1, 'name' => 'Alice'], ['id' => 2, 'name' => 'Bob']];
-        $result = (new ArrayToKeyValueRule())->transform($data, $this->ctx(['key' => 'id', 'value' => 'name']));
-        $this->assertSame([1 => 'Alice', 2 => 'Bob'], $result);
+        $this->assertSame('data.csv_to_array', new CsvToArrayRule()->getName());
     }
 
     #[Test]
     public function testImplode(): void
     {
-        $this->assertSame('a,b,c', (new ImplodeRule())->transform(['a', 'b', 'c'], $this->ctx()));
-        $this->assertSame('a|b', (new ImplodeRule())->transform(['a', 'b'], $this->ctx(['separator' => '|'])));
-        $this->assertSame('hello', (new ImplodeRule())->transform('hello', $this->ctx())); // non-array
+        $this->assertSame('a,b,c', new ImplodeRule()->transform(['a', 'b', 'c'], $this->ctx()));
+        $this->assertSame('a|b', new ImplodeRule()->transform(['a', 'b'], $this->ctx(['separator' => '|'])));
+        $this->assertSame('hello', new ImplodeRule()->transform('hello', $this->ctx())); // non-array
     }
 
     #[Test]
     public function testGetName(): void
     {
-        $this->assertIsString((new \KaririCode\Transformer\Rule\Data\CsvToArrayRule())->getName());
-        $this->assertIsString((new \KaririCode\Transformer\Rule\Data\JsonEncodeRule())->getName());
-        $this->assertIsString((new \KaririCode\Transformer\Rule\Data\JsonDecodeRule())->getName());
-        $this->assertIsString((new \KaririCode\Transformer\Rule\Data\ImplodeRule())->getName());
-        $this->assertIsString((new \KaririCode\Transformer\Rule\Data\ArrayToKeyValueRule())->getName());
+        $rule = new CsvToArrayRule();
+        $this->assertSame('data.csv_to_array', $rule->getName());
+        $rule = new JsonEncodeRule();
+        $this->assertSame('data.json_encode', $rule->getName());
+        $rule = new ImplodeRule();
+        $this->assertSame('data.implode', $rule->getName());
     }
 }

@@ -17,13 +17,21 @@ use KaririCode\Transformer\Contract\TransformationRule;
  */
 final readonly class DateToTimestampRule implements TransformationRule
 {
+    #[\Override]
     public function transform(mixed $value, TransformationContext $context): mixed
     {
-        if (!is_string($value) || trim($value) === '') { return $value; }
-        $format = (string) $context->getParameter('format', 'Y-m-d');
+        if (! \is_string($value) || trim($value) === '') {
+            return $value;
+        }
+        $format = (\is_string($_p = $context->getParameter('format', 'Y-m-d')) ? $_p : '');
         $date = \DateTimeImmutable::createFromFormat($format, $value);
+
         return $date !== false ? $date->getTimestamp() : $value;
     }
 
-    public function getName(): string { return 'date.to_timestamp'; }
+    #[\Override]
+    public function getName(): string
+    {
+        return 'date.to_timestamp';
+    }
 }

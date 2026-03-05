@@ -18,7 +18,11 @@ final readonly class FieldTransformation
         public string $ruleName,
         public mixed $before,
         public mixed $after,
-    ) {}
+    ) {
+    }
 
-    public function wasTransformed(): bool { return $this->before !== $this->after; }
+    public function wasTransformed(): bool
+    {
+        return $this->before !== $this->after;
+    }
 }

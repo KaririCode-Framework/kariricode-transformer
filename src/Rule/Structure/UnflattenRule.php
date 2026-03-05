@@ -17,19 +17,25 @@ use KaririCode\Transformer\Contract\TransformationRule;
  */
 final readonly class UnflattenRule implements TransformationRule
 {
+    #[\Override]
     public function transform(mixed $value, TransformationContext $context): mixed
     {
-        if (!is_array($value)) { return $value; }
-        $separator = (string) $context->getParameter('separator', '.');
+        if (! \is_array($value)) {
+            return $value;
+        }
+        $separator = (\is_string($_p = $context->getParameter('separator', '.')) ? $_p : '.');
+        $sep = $separator !== '' ? $separator : '.';
+        /** @var array<string, mixed> $result */
         $result = [];
 
         foreach ($value as $key => $val) {
-            $keys = explode($separator, (string) $key);
+            $keys = explode($sep, (string) $key);
             $ref = &$result;
             foreach ($keys as $segment) {
-                if (!isset($ref[$segment]) || !is_array($ref[$segment])) {
+                if (! \array_key_exists($segment, (array) $ref) || ! \is_array($ref[$segment])) {
                     $ref[$segment] = [];
                 }
+                /** @var array<string, mixed> $ref */
                 $ref = &$ref[$segment];
             }
             $ref = $val;
@@ -39,5 +45,9 @@ final readonly class UnflattenRule implements TransformationRule
         return $result;
     }
 
-    public function getName(): string { return 'structure.unflatten'; }
+    #[\Override]
+    public function getName(): string
+    {
+        return 'structure.unflatten';
+    }
 }
