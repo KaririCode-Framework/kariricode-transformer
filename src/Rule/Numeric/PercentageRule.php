@@ -25,8 +25,8 @@ final readonly class PercentageRule implements TransformationRule
     {
         if (!is_numeric($value)) { return $value; }
 
-        $decimals = (int) $context->getParameter('decimals', 2);
-        $suffix = (string) $context->getParameter('suffix', '%');
+        $decimals = (is_int($_p = $context->getParameter('decimals', 2)) ? $_p : 0);
+        $suffix = (is_string($_p = $context->getParameter('suffix', '%')) ? $_p : '');
 
         return number_format((float) $value * 100, $decimals) . $suffix;
     }

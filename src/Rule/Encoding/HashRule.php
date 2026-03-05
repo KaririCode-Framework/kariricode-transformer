@@ -20,7 +20,7 @@ final readonly class HashRule implements TransformationRule
     public function transform(mixed $value, TransformationContext $context): mixed
     {
         if (!is_string($value)) { return $value; }
-        $algo = (string) $context->getParameter('algo', 'sha256');
+        $algo = (is_string($_p = $context->getParameter('algo', 'sha256')) ? $_p : '');
         return hash($algo, $value);
     }
 

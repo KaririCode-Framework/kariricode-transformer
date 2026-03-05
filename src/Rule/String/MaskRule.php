@@ -20,9 +20,9 @@ final readonly class MaskRule implements TransformationRule
     {
         if (!is_string($value) || mb_strlen($value, 'UTF-8') === 0) { return $value; }
 
-        $keepStart = (int) $context->getParameter('keep_start', 3);
-        $keepEnd = (int) $context->getParameter('keep_end', 3);
-        $char = (string) $context->getParameter('char', '*');
+        $keepStart = (is_int($_p = $context->getParameter('keep_start', 3)) ? $_p : 0);
+        $keepEnd = (is_int($_p = $context->getParameter('keep_end', 3)) ? $_p : 0);
+        $char = (is_string($_p = $context->getParameter('char', '*')) ? $_p : '');
         $len = mb_strlen($value, 'UTF-8');
 
         if ($keepStart + $keepEnd >= $len) { return $value; }

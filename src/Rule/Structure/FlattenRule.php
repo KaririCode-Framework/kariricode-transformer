@@ -20,12 +20,16 @@ final readonly class FlattenRule implements TransformationRule
     public function transform(mixed $value, TransformationContext $context): mixed
     {
         if (!is_array($value)) { return $value; }
-        $separator = (string) $context->getParameter('separator', '.');
+        $separator = (is_string($_p = $context->getParameter('separator', '.')) ? $_p : '');
         return $this->flattenArray($value, '', $separator);
     }
 
     public function getName(): string { return 'structure.flatten'; }
 
+    /**
+     * @param array<mixed> $array
+     * @return array<string, mixed>
+     */
     private function flattenArray(array $array, string $prefix, string $separator): array
     {
         $result = [];

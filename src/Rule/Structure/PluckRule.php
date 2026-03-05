@@ -20,7 +20,7 @@ final readonly class PluckRule implements TransformationRule
     public function transform(mixed $value, TransformationContext $context): mixed
     {
         if (!is_array($value)) { return $value; }
-        $field = (string) $context->getParameter('field', '');
+        $field = (is_string($_p = $context->getParameter('field', '')) ? $_p : '');
         if ($field === '') { return $value; }
 
         return array_values(array_map(

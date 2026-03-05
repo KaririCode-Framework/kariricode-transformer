@@ -59,6 +59,7 @@ final class TransformerEngine
         return $result;
     }
 
+    /** @param array<string, mixed> $data */
     private function resolveValue(array $data, string $field): mixed
     {
         if (array_key_exists($field, $data)) {
@@ -75,7 +76,10 @@ final class TransformerEngine
         return $current;
     }
 
-    /** @return array{0: TransformationRule, 1: array<string, mixed>} */
+    /**
+     * @param string|array{0: string|TransformationRule, 1: array<string, mixed>}|TransformationRule $definition
+     * @return array{0: TransformationRule, 1: array<string, mixed>}
+     */
     private function resolveRule(string|array|TransformationRule $definition): array
     {
         if ($definition instanceof TransformationRule) {

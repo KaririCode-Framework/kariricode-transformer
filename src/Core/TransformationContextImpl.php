@@ -15,21 +15,36 @@ use KaririCode\Transformer\Contract\TransformationContext;
  */
 final readonly class TransformationContextImpl implements TransformationContext
 {
-    /** @param array<string, mixed> $rootData @param array<string, mixed> $parameters */
+    /**
+     * @param string         $fieldName
+     * @param array<string, mixed> $rootData
+     * @param array<string, mixed> $parameters
+     */
     private function __construct(
         private string $fieldName,
         private array $rootData,
         private array $parameters,
     ) {}
 
+    /**
+     * @param array<string, mixed> $rootData
+     */
     public static function create(array $rootData): self
     {
         return new self('', $rootData, []);
     }
 
     public function getFieldName(): string { return $this->fieldName; }
+
+    /** @return array<string, mixed> */
     public function getRootData(): array { return $this->rootData; }
-    public function getParameter(string $key, mixed $default = null): mixed { return $this->parameters[$key] ?? $default; }
+
+    public function getParameter(string $key, mixed $default = null): mixed
+    {
+        return $this->parameters[$key] ?? $default;
+    }
+
+    /** @return array<string, mixed> */
     public function getParameters(): array { return $this->parameters; }
 
     public function withField(string $field): static
@@ -37,6 +52,9 @@ final readonly class TransformationContextImpl implements TransformationContext
         return new self($field, $this->rootData, $this->parameters);
     }
 
+    /**
+     * @param array<string, mixed> $parameters
+     */
     public function withParameters(array $parameters): static
     {
         return new self($this->fieldName, $this->rootData, [...$this->parameters, ...$parameters]);

@@ -25,7 +25,8 @@ final readonly class RenameKeysRule implements TransformationRule
 
         $result = [];
         foreach ($value as $key => $val) {
-            $newKey = $map[$key] ?? $key;
+            $mapped = $map[$key] ?? null;
+            $newKey = (is_string($mapped) || is_int($mapped)) ? (string) $mapped : $key;
             $result[$newKey] = $val;
         }
         return $result;

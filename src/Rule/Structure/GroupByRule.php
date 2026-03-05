@@ -20,14 +20,17 @@ final readonly class GroupByRule implements TransformationRule
     public function transform(mixed $value, TransformationContext $context): mixed
     {
         if (!is_array($value)) { return $value; }
-        $field = (string) $context->getParameter('field', '');
+        $field = (is_string($_p = $context->getParameter('field', '')) ? $_p : '');
         if ($field === '') { return $value; }
 
         $groups = [];
         foreach ($value as $item) {
-            if (is_array($item) && isset($item[$field])) {
-                $key = (string) $item[$field];
-                $groups[$key][] = $item;
+            if (is_array($item) && array_key_exists($field, $item)) {
+                $raw = $item[$field];
+                $key = is_int($raw) || is_string($raw) ? (string) $raw : '';
+                if ($key !== '') {
+                    $groups[$key][] = $item;
+                }
             }
         }
         return $groups;

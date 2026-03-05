@@ -20,7 +20,7 @@ final readonly class AgeRule implements TransformationRule
     public function transform(mixed $value, TransformationContext $context): mixed
     {
         if (!is_string($value) || trim($value) === '') { return $value; }
-        $format = (string) $context->getParameter('from', 'Y-m-d');
+        $format = (is_string($_p = $context->getParameter('from', 'Y-m-d')) ? $_p : '');
         $date = \DateTimeImmutable::createFromFormat($format, $value);
         if ($date === false) { return $value; }
 

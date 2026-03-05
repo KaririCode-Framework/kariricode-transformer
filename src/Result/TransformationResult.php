@@ -16,7 +16,10 @@ final class TransformationResult
     /** @var list<FieldTransformation> */
     private array $transformations = [];
 
-    /** @param array<string, mixed> $originalData @param array<string, mixed> $transformedData */
+    /**
+     * @param array<string, mixed> $originalData
+     * @param array<string, mixed> $transformedData
+     */
     public function __construct(
         private readonly array $originalData,
         private array $transformedData,

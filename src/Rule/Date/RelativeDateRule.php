@@ -25,7 +25,7 @@ final readonly class RelativeDateRule implements TransformationRule
     {
         if (!is_string($value) || trim($value) === '') { return $value; }
 
-        $format = (string) $context->getParameter('from', 'Y-m-d H:i:s');
+        $format = (is_string($_p = $context->getParameter('from', 'Y-m-d H:i:s')) ? $_p : '');
         $date = \DateTimeImmutable::createFromFormat($format, $value);
         if ($date === false) { return $value; }
 

@@ -20,8 +20,8 @@ final readonly class ImplodeRule implements TransformationRule
     public function transform(mixed $value, TransformationContext $context): mixed
     {
         if (!is_array($value)) { return $value; }
-        $separator = (string) $context->getParameter('separator', ',');
-        return implode($separator, array_map('strval', $value));
+        $separator = (is_string($_p = $context->getParameter('separator', ',')) ? $_p : ',');
+        return implode($separator, array_map(static fn (mixed $v): string => is_scalar($v) ? (string) $v : '', $value));
     }
 
     public function getName(): string { return 'data.implode'; }

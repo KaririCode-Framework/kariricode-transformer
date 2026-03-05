@@ -17,6 +17,9 @@ final readonly class Transform
     /** @var list<string|array{0: string, 1: array<string, mixed>}> */
     public array $rules;
 
+    /**
+     * @param string|array{0: string, 1: array<string, mixed>} ...$rules
+     */
     public function __construct(string|array ...$rules)
     {
         $this->rules = array_values($rules);

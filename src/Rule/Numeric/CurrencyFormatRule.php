@@ -25,10 +25,10 @@ final readonly class CurrencyFormatRule implements TransformationRule
     {
         if (!is_numeric($value)) { return $value; }
 
-        $decimals = (int) $context->getParameter('decimals', 2);
-        $decPoint = (string) $context->getParameter('dec_point', '.');
-        $thousands = (string) $context->getParameter('thousands', ',');
-        $prefix = (string) $context->getParameter('prefix', '');
+        $decimals = (is_int($_p = $context->getParameter('decimals', 2)) ? $_p : 0);
+        $decPoint = (is_string($_p = $context->getParameter('dec_point', '.')) ? $_p : '');
+        $thousands = (is_string($_p = $context->getParameter('thousands', ',')) ? $_p : '');
+        $prefix = (is_string($_p = $context->getParameter('prefix', '')) ? $_p : '');
 
         return $prefix . number_format((float) $value, $decimals, $decPoint, $thousands);
     }

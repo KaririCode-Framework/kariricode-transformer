@@ -16,10 +16,15 @@ use KaririCode\Transformer\Result\TransformationResult;
  */
 final readonly class ProcessorBridge
 {
-    /** @param array<string, list<string|array>> $fieldRules */
+    /**
+     * @param array<string, list<string|array{0: string, 1: array<string, mixed>}>> $fieldRules
+     */
     public function __construct(private TransformerEngine $engine, private array $fieldRules) {}
 
-    /** @param array<string, mixed> $data @return array{data: array<string, mixed>, result: TransformationResult} */
+    /**
+     * @param array<string, mixed> $data
+     * @return array{data: array<string, mixed>, result: TransformationResult}
+     */
     public function process(array $data): array
     {
         $result = $this->engine->transform($data, $this->fieldRules);

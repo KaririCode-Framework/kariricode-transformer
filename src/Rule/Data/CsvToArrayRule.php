@@ -24,9 +24,9 @@ final readonly class CsvToArrayRule implements TransformationRule
             return $value;
         }
 
-        $separator = (string) $context->getParameter('separator', ',');
-        $enclosure = (string) $context->getParameter('enclosure', '"');
-        $hasHeader = (bool) $context->getParameter('header', true);
+        $separator = (is_string($_p = $context->getParameter('separator', ',')) ? $_p : '');
+        $enclosure = (is_string($_p = $context->getParameter('enclosure', '"')) ? $_p : '');
+        $hasHeader = (is_bool($_p = $context->getParameter('header', true)) ? $_p : false);
 
         $lines = array_filter(
             explode("\n", str_replace("\r\n", "\n", $value)),
@@ -44,6 +44,8 @@ final readonly class CsvToArrayRule implements TransformationRule
 
         if ($hasHeader && count($rows) > 1) {
             $headers = array_shift($rows);
+            /** @var list<string> $headers */
+            $headers = array_map(static fn (mixed $h): string => (string) $h, $headers);
             return array_map(
                 static fn (array $row) => array_combine($headers, array_pad($row, count($headers), '')),
                 $rows,

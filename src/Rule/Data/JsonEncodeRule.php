@@ -18,7 +18,7 @@ final readonly class JsonEncodeRule implements TransformationRule
 {
     public function transform(mixed $value, TransformationContext $context): mixed
     {
-        $flags = (int) $context->getParameter('flags', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $flags = (is_int($_p = $context->getParameter('flags', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) ? $_p : 0);
         $result = json_encode($value, $flags);
         return $result !== false ? $result : $value;
     }

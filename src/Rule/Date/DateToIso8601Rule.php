@@ -21,8 +21,8 @@ final readonly class DateToIso8601Rule implements TransformationRule
     {
         if (!is_string($value) || trim($value) === '') { return $value; }
 
-        $from = (string) $context->getParameter('from', 'd/m/Y');
-        $tz = (string) $context->getParameter('timezone', 'UTC');
+        $from = (is_string($_p = $context->getParameter('from', 'd/m/Y')) ? $_p : '');
+        $tz = (is_string($_p = $context->getParameter('timezone', 'UTC')) ? $_p : '');
 
         $date = \DateTimeImmutable::createFromFormat($from, $value);
         if ($date === false) { return $value; }

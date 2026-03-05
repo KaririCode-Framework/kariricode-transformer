@@ -37,9 +37,12 @@ final readonly class AttributeTransformer
         /** @var TransformAttributeHandler $handler */
         $handler = $this->inspector->inspect($object, $handler);
 
+        /** @var array<string, list<string|array{0: string, 1: array<string, mixed>}>> $fieldRules */
+        $fieldRules = $handler->getFieldRules();
+
         $result = $this->engine->transform(
             $handler->getProcessedPropertyValues(),
-            $handler->getFieldRules(),
+            $fieldRules,
         );
 
         $handler->setProcessedValues($result->getTransformedData());

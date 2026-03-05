@@ -21,13 +21,16 @@ final readonly class ArrayToKeyValueRule implements TransformationRule
     {
         if (!is_array($value)) { return $value; }
 
-        $keyField = (string) $context->getParameter('key', 'id');
-        $valueField = (string) $context->getParameter('value', 'name');
+        $keyField   = (is_string($_p = $context->getParameter('key', 'id')) ? $_p : '');
+        $valueField = (is_string($_p = $context->getParameter('value', 'name')) ? $_p : '');
 
         $map = [];
         foreach ($value as $item) {
-            if (is_array($item) && isset($item[$keyField], $item[$valueField])) {
-                $map[$item[$keyField]] = $item[$valueField];
+            if (is_array($item) && array_key_exists($keyField, $item) && array_key_exists($valueField, $item)) {
+                $k = $item[$keyField];
+                if (is_int($k) || is_string($k)) {
+                    $map[$k] = $item[$valueField];
+                }
             }
         }
         return $map;
