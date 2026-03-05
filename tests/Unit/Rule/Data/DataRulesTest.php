@@ -77,8 +77,8 @@ final class DataRulesTest extends TestCase
     #[Test]
     public function testGetName(): void
     {
-        $this->assertIsString((new \KaririCode\Transformer\Rule\Data\CsvToArrayRule())->getName());
-        $this->assertIsString((new \KaririCode\Transformer\Rule\Data\JsonEncodeRule())->getName());
-        $this->assertIsString((new \KaririCode\Transformer\Rule\Data\ImplodeRule())->getName());
+        $this->assertSame('data.csv_to_array', (new CsvToArrayRule())->getName());
+        $this->assertSame('data.json_encode', (new JsonEncodeRule())->getName());
+        $this->assertSame('data.implode', (new ImplodeRule())->getName());
     }
 }

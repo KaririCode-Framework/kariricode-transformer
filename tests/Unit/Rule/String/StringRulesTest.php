@@ -88,12 +88,12 @@ final class StringRulesTest extends TestCase
     public function testGetName(): void
     {
         // String rules
-        $this->assertIsString((new \KaririCode\Transformer\Rule\String\CamelCaseRule())->getName());
-        $this->assertIsString((new \KaririCode\Transformer\Rule\String\SnakeCaseRule())->getName());
-        $this->assertIsString((new \KaririCode\Transformer\Rule\String\KebabCaseRule())->getName());
-        $this->assertIsString((new \KaririCode\Transformer\Rule\String\PascalCaseRule())->getName());
-        $this->assertIsString((new \KaririCode\Transformer\Rule\String\MaskRule())->getName());
-        $this->assertIsString((new \KaririCode\Transformer\Rule\String\ReverseRule())->getName());
-        $this->assertIsString((new \KaririCode\Transformer\Rule\String\RepeatRule())->getName());
+        $this->assertSame('string.camel_case', (new CamelCaseRule())->getName());
+        $this->assertSame('string.snake_case', (new SnakeCaseRule())->getName());
+        $this->assertSame('string.kebab_case', (new KebabCaseRule())->getName());
+        $this->assertSame('string.pascal_case', (new PascalCaseRule())->getName());
+        $this->assertSame('string.mask', (new MaskRule())->getName());
+        $this->assertSame('string.reverse', (new ReverseRule())->getName());
+        $this->assertSame('string.repeat', (new RepeatRule())->getName());
     }
 }

@@ -163,7 +163,7 @@ final class DateRulesTest extends TestCase
     #[Test]
     public function testGetName(): void
     {
-        $this->assertIsString((new \KaririCode\Transformer\Rule\Date\DateToIso8601Rule())->getName());
-        $this->assertIsString((new \KaririCode\Transformer\Rule\Date\RelativeDateRule())->getName());
+        $this->assertSame('date.to_iso8601', (new DateToIso8601Rule())->getName());
+        $this->assertSame('date.relative', (new RelativeDateRule())->getName());
     }
 }

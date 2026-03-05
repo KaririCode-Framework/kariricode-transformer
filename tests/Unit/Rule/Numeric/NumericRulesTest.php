@@ -67,6 +67,6 @@ final class NumericRulesTest extends TestCase
     #[Test]
     public function testGetName(): void
     {
-        $this->assertIsString((new \KaririCode\Transformer\Rule\Numeric\CurrencyFormatRule())->getName());
+        $this->assertSame('numeric.currency_format', (new CurrencyFormatRule())->getName());
     }
 }

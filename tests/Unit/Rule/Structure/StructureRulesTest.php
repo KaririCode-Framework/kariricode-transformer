@@ -89,10 +89,10 @@ final class StructureRulesTest extends TestCase
     #[Test]
     public function testGetName(): void
     {
-        $this->assertIsString((new \KaririCode\Transformer\Rule\Structure\FlattenRule())->getName());
-        $this->assertIsString((new \KaririCode\Transformer\Rule\Structure\PluckRule())->getName());
-        $this->assertIsString((new \KaririCode\Transformer\Rule\Structure\GroupByRule())->getName());
-        $this->assertIsString((new \KaririCode\Transformer\Rule\Structure\RenameKeysRule())->getName());
-        $this->assertIsString((new \KaririCode\Transformer\Rule\Structure\UnflattenRule())->getName());
+        $this->assertSame('structure.flatten', (new FlattenRule())->getName());
+        $this->assertSame('structure.pluck', (new PluckRule())->getName());
+        $this->assertSame('structure.group_by', (new GroupByRule())->getName());
+        $this->assertSame('structure.rename_keys', (new RenameKeysRule())->getName());
+        $this->assertSame('structure.unflatten', (new UnflattenRule())->getName());
     }
 }
