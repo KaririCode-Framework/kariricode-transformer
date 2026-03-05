@@ -17,7 +17,7 @@ final class FullPipelineTest extends TestCase
     #[Test]
     public function testAllRulesResolvable(): void
     {
-        $registry = (new TransformerServiceProvider())->createRegistry();
+        $registry = new TransformerServiceProvider()->createRegistry();
         foreach ($registry->aliases() as $alias) {
             $rule = $registry->resolve($alias);
             $this->assertNotEmpty($rule->getName(), "Rule '{$alias}' has empty name.");
@@ -25,10 +25,9 @@ final class FullPipelineTest extends TestCase
     }
 
     #[Test]
-
     public function testComplexPipeline(): void
     {
-        $engine = (new TransformerServiceProvider())->createEngine();
+        $engine = new TransformerServiceProvider()->createEngine();
 
         $result = $engine->transform(
             [

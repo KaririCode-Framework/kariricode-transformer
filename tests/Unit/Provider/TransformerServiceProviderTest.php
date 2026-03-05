@@ -25,10 +25,9 @@ final class TransformerServiceProviderTest extends TestCase
     ];
 
     #[Test]
-
     public function testRegistersAll32Aliases(): void
     {
-        $registry = (new TransformerServiceProvider())->createRegistry();
+        $registry = new TransformerServiceProvider()->createRegistry();
         $this->assertCount(32, $registry->aliases());
         foreach (self::EXPECTED_ALIASES as $alias) {
             $this->assertTrue($registry->has($alias), "Missing alias: {$alias}");
@@ -36,16 +35,14 @@ final class TransformerServiceProviderTest extends TestCase
     }
 
     #[Test]
-
     public function testCreateEngine(): void
     {
-        $this->assertInstanceOf(TransformerEngine::class, (new TransformerServiceProvider())->createEngine());
+        $this->assertInstanceOf(TransformerEngine::class, new TransformerServiceProvider()->createEngine());
     }
 
     #[Test]
-
     public function testCreateAttributeTransformer(): void
     {
-        $this->assertInstanceOf(AttributeTransformer::class, (new TransformerServiceProvider())->createAttributeTransformer());
+        $this->assertInstanceOf(AttributeTransformer::class, new TransformerServiceProvider()->createAttributeTransformer());
     }
 }

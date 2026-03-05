@@ -25,7 +25,8 @@ final class TransformerEngine
     public function __construct(
         private readonly RuleRegistry $registry,
         private readonly ?TransformerConfiguration $configuration = null,
-    ) {}
+    ) {
+    }
 
     /**
      * @param array<string, mixed> $data
@@ -62,17 +63,18 @@ final class TransformerEngine
     /** @param array<string, mixed> $data */
     private function resolveValue(array $data, string $field): mixed
     {
-        if (array_key_exists($field, $data)) {
+        if (\array_key_exists($field, $data)) {
             return $data[$field];
         }
         $segments = explode('.', $field);
         $current = $data;
         foreach ($segments as $segment) {
-            if (!is_array($current) || !array_key_exists($segment, $current)) {
+            if (! \is_array($current) || ! \array_key_exists($segment, $current)) {
                 return null;
             }
             $current = $current[$segment];
         }
+
         return $current;
     }
 
@@ -85,12 +87,13 @@ final class TransformerEngine
         if ($definition instanceof TransformationRule) {
             return [$definition, []];
         }
-        if (is_string($definition)) {
+        if (\is_string($definition)) {
             return [$this->registry->resolve($definition), []];
         }
         $ruleRef = $definition[0];
         $params = $definition[1] ?? [];
         $rule = $ruleRef instanceof TransformationRule ? $ruleRef : $this->registry->resolve($ruleRef);
+
         return [$rule, $params];
     }
 }

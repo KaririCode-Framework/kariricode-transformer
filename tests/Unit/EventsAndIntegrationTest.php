@@ -38,7 +38,7 @@ final class EventsAndIntegrationTest extends TestCase
     #[Test]
     public function testTransformationCompletedEvent(): void
     {
-        $engine = (new TransformerServiceProvider())->createEngine();
+        $engine = new TransformerServiceProvider()->createEngine();
         $result = $engine->transform(['x' => 'hello'], ['x' => ['camel_case']]);
 
         $event = new TransformationCompletedEvent($result, 12.5, 1234567890.0);
@@ -51,7 +51,7 @@ final class EventsAndIntegrationTest extends TestCase
     #[Test]
     public function testTransformationCompletedEventDefaultTimestamp(): void
     {
-        $engine = (new TransformerServiceProvider())->createEngine();
+        $engine = new TransformerServiceProvider()->createEngine();
         $result = $engine->transform(['x' => 'hello'], []);
 
         $event = new TransformationCompletedEvent($result, 5.0);
@@ -62,7 +62,7 @@ final class EventsAndIntegrationTest extends TestCase
     #[Test]
     public function testProcessorBridgeProcess(): void
     {
-        $engine = (new TransformerServiceProvider())->createEngine();
+        $engine = new TransformerServiceProvider()->createEngine();
         $bridge = new ProcessorBridge($engine, ['name' => ['camel_case']]);
 
         $output = $bridge->process(['name' => 'hello_world']);

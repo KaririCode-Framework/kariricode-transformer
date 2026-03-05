@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace KaririCode\Transformer\Tests\Unit\Rule\Numeric;
 
-use KaririCode\Transformer\Core\TransformationContextImpl;
 use KaririCode\Transformer\Contract\TransformationContext;
-use KaririCode\Transformer\Rule\Numeric\{CurrencyFormatRule, PercentageRule, OrdinalRule, NumberToWordsRule};
+use KaririCode\Transformer\Core\TransformationContextImpl;
+use KaririCode\Transformer\Rule\Numeric\{CurrencyFormatRule, NumberToWordsRule, OrdinalRule, PercentageRule};
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -23,26 +23,24 @@ final class NumericRulesTest extends TestCase
     }
 
     #[Test]
-
     public function testCurrencyFormat(): void
     {
-        $this->assertSame('1,234.50', (new CurrencyFormatRule())->transform(1234.5, $this->ctx()));
-        $this->assertSame('R$ 1.234,50', (new CurrencyFormatRule())->transform(
-            1234.5, $this->ctx(['prefix' => 'R$ ', 'dec_point' => ',', 'thousands' => '.'])
+        $this->assertSame('1,234.50', new CurrencyFormatRule()->transform(1234.5, $this->ctx()));
+        $this->assertSame('R$ 1.234,50', new CurrencyFormatRule()->transform(
+            1234.5,
+            $this->ctx(['prefix' => 'R$ ', 'dec_point' => ',', 'thousands' => '.']),
         ));
-        $this->assertSame('abc', (new CurrencyFormatRule())->transform('abc', $this->ctx()));
+        $this->assertSame('abc', new CurrencyFormatRule()->transform('abc', $this->ctx()));
     }
 
     #[Test]
-
     public function testPercentage(): void
     {
-        $this->assertSame('85.00%', (new PercentageRule())->transform(0.85, $this->ctx()));
-        $this->assertSame('100.0%', (new PercentageRule())->transform(1.0, $this->ctx(['decimals' => 1])));
+        $this->assertSame('85.00%', new PercentageRule()->transform(0.85, $this->ctx()));
+        $this->assertSame('100.0%', new PercentageRule()->transform(1.0, $this->ctx(['decimals' => 1])));
     }
 
     #[Test]
-
     public function testOrdinal(): void
     {
         $rule = new OrdinalRule();
@@ -57,7 +55,6 @@ final class NumericRulesTest extends TestCase
     }
 
     #[Test]
-
     public function testNumberToWords(): void
     {
         $rule = new NumberToWordsRule();
@@ -71,12 +68,11 @@ final class NumericRulesTest extends TestCase
     }
 
     #[Test]
-
     public function testGetName(): void
     {
-        $this->assertIsString((new \KaririCode\Transformer\Rule\Numeric\CurrencyFormatRule())->getName());
-        $this->assertIsString((new \KaririCode\Transformer\Rule\Numeric\PercentageRule())->getName());
-        $this->assertIsString((new \KaririCode\Transformer\Rule\Numeric\OrdinalRule())->getName());
-        $this->assertIsString((new \KaririCode\Transformer\Rule\Numeric\NumberToWordsRule())->getName());
+        $this->assertIsString(new \KaririCode\Transformer\Rule\Numeric\CurrencyFormatRule()->getName());
+        $this->assertIsString(new \KaririCode\Transformer\Rule\Numeric\PercentageRule()->getName());
+        $this->assertIsString(new \KaririCode\Transformer\Rule\Numeric\OrdinalRule()->getName());
+        $this->assertIsString(new \KaririCode\Transformer\Rule\Numeric\NumberToWordsRule()->getName());
     }
 }

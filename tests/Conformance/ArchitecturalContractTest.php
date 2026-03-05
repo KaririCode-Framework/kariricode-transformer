@@ -47,7 +47,6 @@ final class ArchitecturalContractTest extends TestCase
     ];
 
     #[Test]
-
     public function testAllRulesAreFinalReadonly(): void
     {
         foreach (self::RULE_CLASSES as $class) {
@@ -58,7 +57,6 @@ final class ArchitecturalContractTest extends TestCase
     }
 
     #[Test]
-
     public function testAllRulesImplementContract(): void
     {
         foreach (self::RULE_CLASSES as $class) {
@@ -70,7 +68,6 @@ final class ArchitecturalContractTest extends TestCase
     }
 
     #[Test]
-
     public function testRuleCount(): void
     {
         $this->assertCount(32, self::RULE_CLASSES);

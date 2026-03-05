@@ -31,13 +31,13 @@ final class TransformAttributeHandler implements PropertyAttributeHandler, Prope
     #[\Override]
     public function handleAttribute(string $propertyName, object $attribute, mixed $value): mixed
     {
-        if (!$attribute instanceof Transform) {
+        if (! $attribute instanceof Transform) {
             return null;
         }
 
         $this->data[$propertyName] = $value;
 
-        if (!isset($this->fieldRules[$propertyName])) {
+        if (! isset($this->fieldRules[$propertyName])) {
             $this->fieldRules[$propertyName] = [];
         }
 
@@ -84,7 +84,7 @@ final class TransformAttributeHandler implements PropertyAttributeHandler, Prope
     {
         foreach ($this->processedValues as $property => $value) {
             try {
-                (new PropertyAccessor($object, $property))->setValue($value);
+                new PropertyAccessor($object, $property)->setValue($value);
             } catch (\ReflectionException) {
                 // Property doesn't exist — skip silently
             }

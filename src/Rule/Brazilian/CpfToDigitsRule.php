@@ -17,12 +17,20 @@ use KaririCode\Transformer\Contract\TransformationRule;
  */
 final readonly class CpfToDigitsRule implements TransformationRule
 {
+    #[\Override]
     public function transform(mixed $value, TransformationContext $context): mixed
     {
-        if (!is_string($value)) { return $value; }
+        if (! \is_string($value)) {
+            return $value;
+        }
         $digits = preg_replace('/\D/', '', $value) ?? '';
-        return strlen($digits) === 11 ? $digits : $value;
+
+        return \strlen($digits) === 11 ? $digits : $value;
     }
 
-    public function getName(): string { return 'brazilian.cpf_to_digits'; }
+    #[\Override]
+    public function getName(): string
+    {
+        return 'brazilian.cpf_to_digits';
+    }
 }

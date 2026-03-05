@@ -17,16 +17,26 @@ use KaririCode\Transformer\Contract\TransformationRule;
  */
 final readonly class AgeRule implements TransformationRule
 {
+    #[\Override]
     public function transform(mixed $value, TransformationContext $context): mixed
     {
-        if (!is_string($value) || trim($value) === '') { return $value; }
-        $format = (is_string($_p = $context->getParameter('from', 'Y-m-d')) ? $_p : '');
+        if (! \is_string($value) || trim($value) === '') {
+            return $value;
+        }
+        $format = (\is_string($_p = $context->getParameter('from', 'Y-m-d')) ? $_p : '');
         $date = \DateTimeImmutable::createFromFormat($format, $value);
-        if ($date === false) { return $value; }
+        if ($date === false) {
+            return $value;
+        }
 
         $now = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
-        return (int) $date->diff($now)->y;
+
+        return $date->diff($now)->y;
     }
 
-    public function getName(): string { return 'date.age'; }
+    #[\Override]
+    public function getName(): string
+    {
+        return 'date.age';
+    }
 }

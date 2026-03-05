@@ -16,12 +16,18 @@ use KaririCode\Transformer\Contract\TransformationRule;
  */
 final readonly class JsonEncodeRule implements TransformationRule
 {
+    #[\Override]
     public function transform(mixed $value, TransformationContext $context): mixed
     {
-        $flags = (is_int($_p = $context->getParameter('flags', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) ? $_p : 0);
+        $flags = (\is_int($_p = $context->getParameter('flags', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) ? $_p : 0);
         $result = json_encode($value, $flags);
+
         return $result !== false ? $result : $value;
     }
 
-    public function getName(): string { return 'data.json_encode'; }
+    #[\Override]
+    public function getName(): string
+    {
+        return 'data.json_encode';
+    }
 }

@@ -22,7 +22,6 @@ final class TransformationContextImplTest extends TestCase
     }
 
     #[Test]
-
     public function testWithFieldReturnsNewInstance(): void
     {
         $ctx = TransformationContextImpl::create([]);
@@ -32,7 +31,6 @@ final class TransformationContextImplTest extends TestCase
     }
 
     #[Test]
-
     public function testWithParametersMerges(): void
     {
         $ctx = TransformationContextImpl::create([])

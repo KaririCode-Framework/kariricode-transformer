@@ -16,13 +16,21 @@ use KaririCode\Transformer\Contract\TransformationRule;
  */
 final readonly class RepeatRule implements TransformationRule
 {
+    #[\Override]
     public function transform(mixed $value, TransformationContext $context): mixed
     {
-        if (!is_string($value)) { return $value; }
-        $times = max(1, (is_int($_p = $context->getParameter('times', 2)) ? $_p : 0));
-        $separator = (is_string($_p = $context->getParameter('separator', '')) ? $_p : '');
+        if (! \is_string($value)) {
+            return $value;
+        }
+        $times = max(1, (\is_int($_p = $context->getParameter('times', 2)) ? $_p : 0));
+        $separator = (\is_string($_p = $context->getParameter('separator', '')) ? $_p : '');
+
         return implode($separator, array_fill(0, $times, $value));
     }
 
-    public function getName(): string { return 'string.repeat'; }
+    #[\Override]
+    public function getName(): string
+    {
+        return 'string.repeat';
+    }
 }

@@ -21,31 +21,40 @@ use KaririCode\Transformer\Contract\TransformationRule;
  */
 final readonly class RelativeDateRule implements TransformationRule
 {
+    #[\Override]
     public function transform(mixed $value, TransformationContext $context): mixed
     {
-        if (!is_string($value) || trim($value) === '') { return $value; }
+        if (! \is_string($value) || trim($value) === '') {
+            return $value;
+        }
 
-        $format = (is_string($_p = $context->getParameter('from', 'Y-m-d H:i:s')) ? $_p : '');
+        $format = (\is_string($_p = $context->getParameter('from', 'Y-m-d H:i:s')) ? $_p : '');
         $date = \DateTimeImmutable::createFromFormat($format, $value);
-        if ($date === false) { return $value; }
+        if ($date === false) {
+            return $value;
+        }
 
         $now = $context->getParameter('now') instanceof \DateTimeInterface
             ? $context->getParameter('now')
             : new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
 
         $diff = $now->getTimestamp() - $date->getTimestamp();
-        $abs = abs($diff);
+        $abs = (int) abs($diff);
         $suffix = $diff >= 0 ? 'ago' : 'from now';
 
         return match (true) {
             $abs < 60 => 'just now',
-            $abs < 3600 => (int) ($abs / 60) . ' minute' . ((int) ($abs / 60) !== 1 ? 's' : '') . " {$suffix}",
-            $abs < 86400 => (int) ($abs / 3600) . ' hour' . ((int) ($abs / 3600) !== 1 ? 's' : '') . " {$suffix}",
-            $abs < 2592000 => (int) ($abs / 86400) . ' day' . ((int) ($abs / 86400) !== 1 ? 's' : '') . " {$suffix}",
-            $abs < 31536000 => (int) ($abs / 2592000) . ' month' . ((int) ($abs / 2592000) !== 1 ? 's' : '') . " {$suffix}",
-            default => (int) ($abs / 31536000) . ' year' . ((int) ($abs / 31536000) !== 1 ? 's' : '') . " {$suffix}",
+            $abs < 3600 => intdiv($abs, 60) . ' minute' . (intdiv($abs, 60) !== 1 ? 's' : '') . " {$suffix}",
+            $abs < 86400 => intdiv($abs, 3600) . ' hour' . (intdiv($abs, 3600) !== 1 ? 's' : '') . " {$suffix}",
+            $abs < 2592000 => intdiv($abs, 86400) . ' day' . (intdiv($abs, 86400) !== 1 ? 's' : '') . " {$suffix}",
+            $abs < 31536000 => intdiv($abs, 2592000) . ' month' . (intdiv($abs, 2592000) !== 1 ? 's' : '') . " {$suffix}",
+            default => intdiv($abs, 31536000) . ' year' . (intdiv($abs, 31536000) !== 1 ? 's' : '') . " {$suffix}",
         };
     }
 
-    public function getName(): string { return 'date.relative'; }
+    #[\Override]
+    public function getName(): string
+    {
+        return 'date.relative';
+    }
 }

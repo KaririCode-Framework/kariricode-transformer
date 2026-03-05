@@ -17,20 +17,30 @@ use KaririCode\Transformer\Contract\TransformationRule;
  */
 final readonly class RenameKeysRule implements TransformationRule
 {
+    #[\Override]
     public function transform(mixed $value, TransformationContext $context): mixed
     {
-        if (!is_array($value)) { return $value; }
+        if (! \is_array($value)) {
+            return $value;
+        }
         $map = (array) $context->getParameter('map', []);
-        if ($map === []) { return $value; }
+        if ($map === []) {
+            return $value;
+        }
 
         $result = [];
         foreach ($value as $key => $val) {
             $mapped = $map[$key] ?? null;
-            $newKey = (is_string($mapped) || is_int($mapped)) ? (string) $mapped : $key;
+            $newKey = (\is_string($mapped) || \is_int($mapped)) ? (string) $mapped : $key;
             $result[$newKey] = $val;
         }
+
         return $result;
     }
 
-    public function getName(): string { return 'structure.rename_keys'; }
+    #[\Override]
+    public function getName(): string
+    {
+        return 'structure.rename_keys';
+    }
 }

@@ -23,7 +23,6 @@ final class ImmutableStateTest extends TestCase
     }
 
     #[Test]
-
     public function testContextWithParametersReturnsNewInstance(): void
     {
         $ctx = TransformationContextImpl::create([]);

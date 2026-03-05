@@ -21,17 +21,24 @@ use KaririCode\Transformer\Contract\TransformationRule;
  */
 final readonly class CurrencyFormatRule implements TransformationRule
 {
+    #[\Override]
     public function transform(mixed $value, TransformationContext $context): mixed
     {
-        if (!is_numeric($value)) { return $value; }
+        if (! is_numeric($value)) {
+            return $value;
+        }
 
-        $decimals = (is_int($_p = $context->getParameter('decimals', 2)) ? $_p : 0);
-        $decPoint = (is_string($_p = $context->getParameter('dec_point', '.')) ? $_p : '');
-        $thousands = (is_string($_p = $context->getParameter('thousands', ',')) ? $_p : '');
-        $prefix = (is_string($_p = $context->getParameter('prefix', '')) ? $_p : '');
+        $decimals = (\is_int($_p = $context->getParameter('decimals', 2)) ? $_p : 0);
+        $decPoint = (\is_string($_p = $context->getParameter('dec_point', '.')) ? $_p : '');
+        $thousands = (\is_string($_p = $context->getParameter('thousands', ',')) ? $_p : '');
+        $prefix = (\is_string($_p = $context->getParameter('prefix', '')) ? $_p : '');
 
         return $prefix . number_format((float) $value, $decimals, $decPoint, $thousands);
     }
 
-    public function getName(): string { return 'numeric.currency_format'; }
+    #[\Override]
+    public function getName(): string
+    {
+        return 'numeric.currency_format';
+    }
 }

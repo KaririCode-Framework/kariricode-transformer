@@ -17,12 +17,20 @@ use KaririCode\Transformer\Contract\TransformationRule;
  */
 final readonly class ImplodeRule implements TransformationRule
 {
+    #[\Override]
     public function transform(mixed $value, TransformationContext $context): mixed
     {
-        if (!is_array($value)) { return $value; }
-        $separator = (is_string($_p = $context->getParameter('separator', ',')) ? $_p : ',');
-        return implode($separator, array_map(static fn (mixed $v): string => is_scalar($v) ? (string) $v : '', $value));
+        if (! \is_array($value)) {
+            return $value;
+        }
+        $separator = (\is_string($_p = $context->getParameter('separator', ',')) ? $_p : ',');
+
+        return implode($separator, array_map(static fn (mixed $v): string => \is_scalar($v) ? (string) $v : '', $value));
     }
 
-    public function getName(): string { return 'data.implode'; }
+    #[\Override]
+    public function getName(): string
+    {
+        return 'data.implode';
+    }
 }

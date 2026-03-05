@@ -22,7 +22,7 @@ final class TransformAttributeHandlerTest extends TestCase
     public function testHandleAttributeIgnoresNonTransformAttributes(): void
     {
         $handler = new TransformAttributeHandler();
-        $result  = $handler->handleAttribute('field', new \stdClass(), 'value');
+        $result = $handler->handleAttribute('field', new \stdClass(), 'value');
         $this->assertNull($result);
         $this->assertSame([], $handler->getFieldRules());
     }
@@ -30,7 +30,7 @@ final class TransformAttributeHandlerTest extends TestCase
     #[Test]
     public function testHandleAttributeCollectsRules(): void
     {
-        $handler   = new TransformAttributeHandler();
+        $handler = new TransformAttributeHandler();
         $attribute = new Transform('camel_case', 'reverse');
 
         $handler->handleAttribute('name', $attribute, 'hello_world');
@@ -43,8 +43,8 @@ final class TransformAttributeHandlerTest extends TestCase
     public function testHandleAttributeMergesMultipleAttributes(): void
     {
         $handler = new TransformAttributeHandler();
-        $attr1   = new Transform('snake_case');
-        $attr2   = new Transform('reverse');
+        $attr1 = new Transform('snake_case');
+        $attr2 = new Transform('reverse');
 
         $handler->handleAttribute('name', $attr1, 'Hello World');
         $handler->handleAttribute('name', $attr2, 'Hello World');
@@ -56,7 +56,7 @@ final class TransformAttributeHandlerTest extends TestCase
     public function testGetProcessedPropertyValues(): void
     {
         $handler = new TransformAttributeHandler();
-        $attr    = new Transform('camel_case');
+        $attr = new Transform('camel_case');
         $handler->handleAttribute('field', $attr, 'hello');
 
         $values = $handler->getProcessedPropertyValues();
@@ -80,7 +80,7 @@ final class TransformAttributeHandlerTest extends TestCase
     #[Test]
     public function testSetProcessedValuesAndApplyChanges(): void
     {
-        $object = new class {
+        $object = new class () {
             public string $name = 'original';
         };
 
@@ -94,7 +94,7 @@ final class TransformAttributeHandlerTest extends TestCase
     #[Test]
     public function testApplyChangesSkipsNonExistentProperties(): void
     {
-        $object = new class {};
+        $object = new class () {};
 
         $handler = new TransformAttributeHandler();
         $handler->setProcessedValues(['nonexistent' => 'value']);
@@ -135,7 +135,7 @@ final class TransformAttributeHandlerTest extends TestCase
     public function testTransformationExceptionWithPrevious(): void
     {
         $prev = new \RuntimeException('root cause');
-        $ex   = TransformationException::engineError('outer', $prev);
+        $ex = TransformationException::engineError('outer', $prev);
         $this->assertSame($prev, $ex->getPrevious());
     }
 }

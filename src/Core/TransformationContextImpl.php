@@ -24,7 +24,8 @@ final readonly class TransformationContextImpl implements TransformationContext
         private string $fieldName,
         private array $rootData,
         private array $parameters,
-    ) {}
+    ) {
+    }
 
     /**
      * @param array<string, mixed> $rootData
@@ -34,19 +35,33 @@ final readonly class TransformationContextImpl implements TransformationContext
         return new self('', $rootData, []);
     }
 
-    public function getFieldName(): string { return $this->fieldName; }
+    #[\Override]
+    public function getFieldName(): string
+    {
+        return $this->fieldName;
+    }
 
     /** @return array<string, mixed> */
-    public function getRootData(): array { return $this->rootData; }
+    #[\Override]
+    public function getRootData(): array
+    {
+        return $this->rootData;
+    }
 
+    #[\Override]
     public function getParameter(string $key, mixed $default = null): mixed
     {
         return $this->parameters[$key] ?? $default;
     }
 
     /** @return array<string, mixed> */
-    public function getParameters(): array { return $this->parameters; }
+    #[\Override]
+    public function getParameters(): array
+    {
+        return $this->parameters;
+    }
 
+    #[\Override]
     public function withField(string $field): static
     {
         return new self($field, $this->rootData, $this->parameters);
@@ -55,6 +70,7 @@ final readonly class TransformationContextImpl implements TransformationContext
     /**
      * @param array<string, mixed> $parameters
      */
+    #[\Override]
     public function withParameters(array $parameters): static
     {
         return new self($this->fieldName, $this->rootData, [...$this->parameters, ...$parameters]);

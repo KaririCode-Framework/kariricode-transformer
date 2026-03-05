@@ -16,12 +16,20 @@ use KaririCode\Transformer\Contract\TransformationRule;
  */
 final readonly class Base64DecodeRule implements TransformationRule
 {
+    #[\Override]
     public function transform(mixed $value, TransformationContext $context): mixed
     {
-        if (!is_string($value)) { return $value; }
+        if (! \is_string($value)) {
+            return $value;
+        }
         $decoded = base64_decode($value, true);
+
         return $decoded !== false ? $decoded : $value;
     }
 
-    public function getName(): string { return 'encoding.base64_decode'; }
+    #[\Override]
+    public function getName(): string
+    {
+        return 'encoding.base64_decode';
+    }
 }

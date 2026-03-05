@@ -17,7 +17,7 @@ final class AttributeTransformerTest extends TestCase
     #[Test]
     public function testTransformDtoViaAttributes(): void
     {
-        $dto = new class {
+        $dto = new class () {
             #[Transform('camel_case')]
             public string $fieldName = 'hello_world';
 
@@ -27,7 +27,7 @@ final class AttributeTransformerTest extends TestCase
             public string $untouched = 'no rules';
         };
 
-        $transformer = (new TransformerServiceProvider())->createAttributeTransformer();
+        $transformer = new TransformerServiceProvider()->createAttributeTransformer();
         $result = $transformer->transform($dto);
 
         $this->assertSame('helloWorld', $dto->fieldName);
@@ -37,16 +37,15 @@ final class AttributeTransformerTest extends TestCase
     }
 
     #[Test]
-
     public function testMultipleAttributes(): void
     {
-        $dto = new class {
+        $dto = new class () {
             #[Transform('snake_case')]
             #[Transform('reverse')]
             public string $name = 'Hello World';
         };
 
-        $transformer = (new TransformerServiceProvider())->createAttributeTransformer();
+        $transformer = new TransformerServiceProvider()->createAttributeTransformer();
         $transformer->transform($dto);
 
         // snake_case: "hello_world" → reverse: "dlrow_olleh"

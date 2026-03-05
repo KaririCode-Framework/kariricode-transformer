@@ -21,15 +21,22 @@ use KaririCode\Transformer\Contract\TransformationRule;
  */
 final readonly class PercentageRule implements TransformationRule
 {
+    #[\Override]
     public function transform(mixed $value, TransformationContext $context): mixed
     {
-        if (!is_numeric($value)) { return $value; }
+        if (! is_numeric($value)) {
+            return $value;
+        }
 
-        $decimals = (is_int($_p = $context->getParameter('decimals', 2)) ? $_p : 0);
-        $suffix = (is_string($_p = $context->getParameter('suffix', '%')) ? $_p : '');
+        $decimals = (\is_int($_p = $context->getParameter('decimals', 2)) ? $_p : 0);
+        $suffix = (\is_string($_p = $context->getParameter('suffix', '%')) ? $_p : '');
 
-        return number_format((float) $value * 100, $decimals) . $suffix;
+        return number_format((float) $value * 100.0, $decimals) . $suffix;
     }
 
-    public function getName(): string { return 'numeric.percentage'; }
+    #[\Override]
+    public function getName(): string
+    {
+        return 'numeric.percentage';
+    }
 }

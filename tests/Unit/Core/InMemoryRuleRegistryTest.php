@@ -26,7 +26,6 @@ final class InMemoryRuleRegistryTest extends TestCase
     }
 
     #[Test]
-
     public function testDuplicateThrows(): void
     {
         $registry = new InMemoryRuleRegistry();
@@ -36,10 +35,9 @@ final class InMemoryRuleRegistryTest extends TestCase
     }
 
     #[Test]
-
     public function testUnknownThrows(): void
     {
         $this->expectException(InvalidRuleException::class);
-        (new InMemoryRuleRegistry())->resolve('unknown');
+        new InMemoryRuleRegistry()->resolve('unknown');
     }
 }

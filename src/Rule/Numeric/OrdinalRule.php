@@ -17,13 +17,16 @@ use KaririCode\Transformer\Contract\TransformationRule;
  */
 final readonly class OrdinalRule implements TransformationRule
 {
+    #[\Override]
     public function transform(mixed $value, TransformationContext $context): mixed
     {
-        if (!is_int($value) && !(is_string($value) && ctype_digit($value))) { return $value; }
+        if (! \is_int($value) && ! (\is_string($value) && ctype_digit($value))) {
+            return $value;
+        }
 
         $n = (int) $value;
         $suffix = match (true) {
-            in_array($n % 100, [11, 12, 13]) => 'th',
+            \in_array($n % 100, [11, 12, 13]) => 'th',
             $n % 10 === 1 => 'st',
             $n % 10 === 2 => 'nd',
             $n % 10 === 3 => 'rd',
@@ -33,5 +36,9 @@ final readonly class OrdinalRule implements TransformationRule
         return $n . $suffix;
     }
 
-    public function getName(): string { return 'numeric.ordinal'; }
+    #[\Override]
+    public function getName(): string
+    {
+        return 'numeric.ordinal';
+    }
 }
