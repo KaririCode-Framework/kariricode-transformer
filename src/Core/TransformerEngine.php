@@ -43,10 +43,10 @@ final class TransformerEngine
 
             foreach ($rules as $ruleDefinition) {
                 [$rule, $params] = $this->resolveRule($ruleDefinition);
-                $ctx = $params !== [] ? $fieldContext->withParameters($params) : $fieldContext;
+                $transformationContext = $params !== [] ? $fieldContext->withParameters($params) : $fieldContext;
 
                 $before = $value;
-                $value = $rule->transform($value, $ctx);
+                $value = $rule->transform($value, $transformationContext);
 
                 if ($config->trackTransformations && $before !== $value) {
                     $result->addTransformation(new FieldTransformation($field, $rule->getName(), $before, $value));
