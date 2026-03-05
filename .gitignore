@@ -28,6 +28,10 @@ Thumbs.db
 
 # Arquivos e pastas de ambientes virtuais
 .env
+.env.example
+.docs/
+.php-cs-fixer.php
+
 
 # Arquivos de cache
 /cache/
