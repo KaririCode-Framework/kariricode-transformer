@@ -9,7 +9,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(\KaririCode\Transformer\Core\TransformationContextImpl::class)]
+#[CoversClass(TransformationContextImpl::class)]
 final class ImmutableStateTest extends TestCase
 {
     #[Test]

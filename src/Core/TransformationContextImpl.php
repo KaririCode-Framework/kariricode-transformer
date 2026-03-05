@@ -16,7 +16,6 @@ use KaririCode\Transformer\Contract\TransformationContext;
 final readonly class TransformationContextImpl implements TransformationContext
 {
     /**
-     * @param string         $fieldName
      * @param array<string, mixed> $rootData
      * @param array<string, mixed> $parameters
      */

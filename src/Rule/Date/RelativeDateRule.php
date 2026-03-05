@@ -39,7 +39,7 @@ final readonly class RelativeDateRule implements TransformationRule
             : new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
 
         $diff = $now->getTimestamp() - $date->getTimestamp();
-        $abs = (int) abs($diff);
+        $abs = $diff >= 0 ? $diff : -$diff;
         $suffix = $diff >= 0 ? 'ago' : 'from now';
 
         return match (true) {

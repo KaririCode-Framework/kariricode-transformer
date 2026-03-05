@@ -11,7 +11,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(\KaririCode\Transformer\Rule\Numeric\CurrencyFormatRule::class)]
+#[CoversClass(CurrencyFormatRule::class)]
 final class NumericRulesTest extends TestCase
 {
     private function ctx(array $params = []): TransformationContext

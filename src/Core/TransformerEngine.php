@@ -20,11 +20,11 @@ use KaririCode\Transformer\Result\TransformationResult;
  * @author  Walmir Silva <walmir.silva@kariricode.org>
  * @since   3.1.0 ARFA 1.3
  */
-final class TransformerEngine
+final readonly class TransformerEngine
 {
     public function __construct(
-        private readonly RuleRegistry $registry,
-        private readonly ?TransformerConfiguration $configuration = null,
+        private RuleRegistry $registry,
+        private ?TransformerConfiguration $configuration = null,
     ) {
     }
 

@@ -11,10 +11,10 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(\KaririCode\Transformer\Provider\TransformerServiceProvider::class)]
+#[CoversClass(TransformerServiceProvider::class)]
 final class TransformerServiceProviderTest extends TestCase
 {
-    private const EXPECTED_ALIASES = [
+    private const array EXPECTED_ALIASES = [
         'camel_case', 'snake_case', 'kebab_case', 'pascal_case', 'mask', 'reverse', 'repeat',
         'json_encode', 'json_decode', 'csv_to_array', 'array_to_key_value', 'implode',
         'currency_format', 'percentage', 'ordinal', 'number_to_words',

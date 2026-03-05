@@ -11,11 +11,11 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(\KaririCode\Transformer\Rule\Structure\FlattenRule::class)]
-#[CoversClass(\KaririCode\Transformer\Rule\Structure\UnflattenRule::class)]
-#[CoversClass(\KaririCode\Transformer\Rule\Structure\PluckRule::class)]
-#[CoversClass(\KaririCode\Transformer\Rule\Structure\GroupByRule::class)]
-#[CoversClass(\KaririCode\Transformer\Rule\Structure\RenameKeysRule::class)]
+#[CoversClass(FlattenRule::class)]
+#[CoversClass(UnflattenRule::class)]
+#[CoversClass(PluckRule::class)]
+#[CoversClass(GroupByRule::class)]
+#[CoversClass(RenameKeysRule::class)]
 final class StructureRulesTest extends TestCase
 {
     private function ctx(array $params = []): TransformationContext

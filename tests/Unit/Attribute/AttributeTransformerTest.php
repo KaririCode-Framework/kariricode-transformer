@@ -5,13 +5,15 @@ declare(strict_types=1);
 namespace KaririCode\Transformer\Tests\Unit\Attribute;
 
 use KaririCode\Transformer\Attribute\Transform;
+use KaririCode\Transformer\Core\AttributeTransformer;
+use KaririCode\Transformer\Core\TransformAttributeHandler;
 use KaririCode\Transformer\Provider\TransformerServiceProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(\KaririCode\Transformer\Core\AttributeTransformer::class)]
-#[CoversClass(\KaririCode\Transformer\Core\TransformAttributeHandler::class)]
+#[CoversClass(AttributeTransformer::class)]
+#[CoversClass(TransformAttributeHandler::class)]
 final class AttributeTransformerTest extends TestCase
 {
     #[Test]

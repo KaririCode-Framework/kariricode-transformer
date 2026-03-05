@@ -11,9 +11,9 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(\KaririCode\Transformer\Rule\Encoding\Base64EncodeRule::class)]
-#[CoversClass(\KaririCode\Transformer\Rule\Encoding\Base64DecodeRule::class)]
-#[CoversClass(\KaririCode\Transformer\Rule\Encoding\HashRule::class)]
+#[CoversClass(Base64EncodeRule::class)]
+#[CoversClass(Base64DecodeRule::class)]
+#[CoversClass(HashRule::class)]
 final class EncodingRulesTest extends TestCase
 {
     private function ctx(array $params = []): TransformationContext

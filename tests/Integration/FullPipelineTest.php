@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace KaririCode\Transformer\Tests\Integration;
 
+use KaririCode\Transformer\Core\InMemoryRuleRegistry;
+use KaririCode\Transformer\Core\TransformerEngine;
 use KaririCode\Transformer\Provider\TransformerServiceProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(\KaririCode\Transformer\Core\TransformerEngine::class)]
-#[CoversClass(\KaririCode\Transformer\Provider\TransformerServiceProvider::class)]
-#[CoversClass(\KaririCode\Transformer\Core\InMemoryRuleRegistry::class)]
+#[CoversClass(TransformerEngine::class)]
+#[CoversClass(TransformerServiceProvider::class)]
+#[CoversClass(InMemoryRuleRegistry::class)]
 final class FullPipelineTest extends TestCase
 {
     #[Test]

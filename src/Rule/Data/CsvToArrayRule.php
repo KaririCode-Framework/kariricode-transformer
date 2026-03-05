@@ -27,11 +27,11 @@ final readonly class CsvToArrayRule implements TransformationRule
 
         $separator = (\is_string($_p = $context->getParameter('separator', ',')) ? $_p : '');
         $enclosure = (\is_string($_p = $context->getParameter('enclosure', '"')) ? $_p : '');
-        $hasHeader = (\is_bool($_p = $context->getParameter('header', true)) ? $_p : false);
+        $hasHeader = (\is_bool($_p = $context->getParameter('header', true)) && $_p);
 
         $lines = array_filter(
             explode("\n", str_replace("\r\n", "\n", $value)),
-            static fn (string $l) => trim($l) !== '',
+            static fn (string $l): bool => trim($l) !== '',
         );
 
         if ($lines === []) {
@@ -39,7 +39,7 @@ final readonly class CsvToArrayRule implements TransformationRule
         }
 
         $rows = array_map(
-            static fn (string $line) => str_getcsv($line, $separator, $enclosure, escape: '\\'),
+            static fn (string $line): array => str_getcsv($line, $separator, $enclosure, escape: '\\'),
             $lines,
         );
 
@@ -49,7 +49,7 @@ final readonly class CsvToArrayRule implements TransformationRule
             $headers = array_map(static fn (mixed $h): string => (string) $h, $headers);
 
             return array_map(
-                static fn (array $row) => array_combine($headers, array_pad($row, \count($headers), '')),
+                static fn (array $row): array => array_combine($headers, array_pad($row, \count($headers), '')),
                 $rows,
             );
         }

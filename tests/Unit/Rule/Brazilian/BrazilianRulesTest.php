@@ -11,10 +11,10 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(\KaririCode\Transformer\Rule\Brazilian\CpfToDigitsRule::class)]
-#[CoversClass(\KaririCode\Transformer\Rule\Brazilian\CnpjToDigitsRule::class)]
-#[CoversClass(\KaririCode\Transformer\Rule\Brazilian\CepToDigitsRule::class)]
-#[CoversClass(\KaririCode\Transformer\Rule\Brazilian\PhoneFormatRule::class)]
+#[CoversClass(CpfToDigitsRule::class)]
+#[CoversClass(CnpjToDigitsRule::class)]
+#[CoversClass(CepToDigitsRule::class)]
+#[CoversClass(PhoneFormatRule::class)]
 final class BrazilianRulesTest extends TestCase
 {
     private function ctx(): TransformationContext

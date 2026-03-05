@@ -61,7 +61,7 @@ final class TransformationResult
     public function transformedFields(): array
     {
         $fields = [];
-        foreach ($this->transformedData as $field => $value) {
+        foreach (array_keys($this->transformedData) as $field) {
             if ($this->isFieldTransformed($field)) {
                 $fields[] = $field;
             }

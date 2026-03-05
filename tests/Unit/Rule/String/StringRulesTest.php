@@ -11,13 +11,13 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(\KaririCode\Transformer\Rule\String\CamelCaseRule::class)]
-#[CoversClass(\KaririCode\Transformer\Rule\String\SnakeCaseRule::class)]
-#[CoversClass(\KaririCode\Transformer\Rule\String\KebabCaseRule::class)]
-#[CoversClass(\KaririCode\Transformer\Rule\String\PascalCaseRule::class)]
-#[CoversClass(\KaririCode\Transformer\Rule\String\MaskRule::class)]
-#[CoversClass(\KaririCode\Transformer\Rule\String\ReverseRule::class)]
-#[CoversClass(\KaririCode\Transformer\Rule\String\RepeatRule::class)]
+#[CoversClass(CamelCaseRule::class)]
+#[CoversClass(SnakeCaseRule::class)]
+#[CoversClass(KebabCaseRule::class)]
+#[CoversClass(PascalCaseRule::class)]
+#[CoversClass(MaskRule::class)]
+#[CoversClass(ReverseRule::class)]
+#[CoversClass(RepeatRule::class)]
 final class StringRulesTest extends TestCase
 {
     private function ctx(array $params = []): TransformationContext
