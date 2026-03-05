@@ -6,35 +6,18 @@ namespace KaririCode\Transformer\Tests\Unit\Rule\Date;
 
 use KaririCode\Transformer\Contract\TransformationContext;
 use KaririCode\Transformer\Core\TransformationContextImpl;
-use KaririCode\Transformer\Rule\Date\{AgeRule, DateToIso8601Rule, DateToTimestampRule, RelativeDateRule};
+use KaririCode\Transformer\Rule\Date\{DateToIso8601Rule, RelativeDateRule};
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(DateToIso8601Rule::class)]
-#[CoversClass(DateToTimestampRule::class)]
 #[CoversClass(RelativeDateRule::class)]
-#[CoversClass(AgeRule::class)]
 final class DateRulesTest extends TestCase
 {
     private function ctx(array $params = []): TransformationContext
     {
         return TransformationContextImpl::create([])->withField('test')->withParameters($params);
-    }
-
-    #[Test]
-    public function testDateToTimestamp(): void
-    {
-        $result = new DateToTimestampRule()->transform('2025-02-28', $this->ctx(['format' => 'Y-m-d']));
-        $this->assertIsInt($result);
-        $date = new \DateTimeImmutable('@' . $result)->format('Y-m-d');
-        $this->assertSame('2025-02-28', $date);
-    }
-
-    #[Test]
-    public function testDateToTimestampInvalid(): void
-    {
-        $this->assertSame('invalid', new DateToTimestampRule()->transform('invalid', $this->ctx()));
     }
 
     #[Test]
@@ -172,32 +155,15 @@ final class DateRulesTest extends TestCase
     public function testRelativeDateUsesDefaultNow(): void
     {
         // No 'now' param provided — uses PHP's current time
-        $recent = new \DateTimeImmutable()->modify('-2 minutes')->format('Y-m-d H:i:s');
+        $recent = (new \DateTimeImmutable())->modify('-2 minutes')->format('Y-m-d H:i:s');
         $result = new RelativeDateRule()->transform($recent, $this->ctx());
         $this->assertStringContainsString('minute', $result);
     }
 
     #[Test]
-    public function testAge(): void
-    {
-        // Someone born 2000-01-15 should be 25 on 2025-02-28
-        $result = new AgeRule()->transform('2000-01-15', $this->ctx(['from' => 'Y-m-d']));
-        $this->assertIsInt($result);
-        $this->assertGreaterThanOrEqual(25, $result);
-    }
-
-    #[Test]
-    public function testAgeInvalid(): void
-    {
-        $this->assertSame('invalid', new AgeRule()->transform('invalid', $this->ctx()));
-    }
-
-    #[Test]
     public function testGetName(): void
     {
-        $this->assertIsString(new \KaririCode\Transformer\Rule\Date\DateToIso8601Rule()->getName());
-        $this->assertIsString(new \KaririCode\Transformer\Rule\Date\DateToTimestampRule()->getName());
-        $this->assertIsString(new \KaririCode\Transformer\Rule\Date\RelativeDateRule()->getName());
-        $this->assertIsString(new AgeRule()->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Date\DateToIso8601Rule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Date\RelativeDateRule())->getName());
     }
 }

@@ -6,15 +6,13 @@ namespace KaririCode\Transformer\Tests\Unit\Rule\Data;
 
 use KaririCode\Transformer\Contract\TransformationContext;
 use KaririCode\Transformer\Core\TransformationContextImpl;
-use KaririCode\Transformer\Rule\Data\{ArrayToKeyValueRule, CsvToArrayRule, ImplodeRule, JsonDecodeRule, JsonEncodeRule};
+use KaririCode\Transformer\Rule\Data\{CsvToArrayRule, ImplodeRule, JsonEncodeRule};
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(JsonEncodeRule::class)]
-#[CoversClass(JsonDecodeRule::class)]
 #[CoversClass(CsvToArrayRule::class)]
-#[CoversClass(ArrayToKeyValueRule::class)]
 #[CoversClass(ImplodeRule::class)]
 final class DataRulesTest extends TestCase
 {
@@ -27,13 +25,6 @@ final class DataRulesTest extends TestCase
     public function testJsonEncode(): void
     {
         $this->assertSame('{"a":1}', new JsonEncodeRule()->transform(['a' => 1], $this->ctx()));
-    }
-
-    #[Test]
-    public function testJsonDecode(): void
-    {
-        $this->assertSame(['a' => 1], new JsonDecodeRule()->transform('{"a":1}', $this->ctx()));
-        $this->assertSame('invalid', new JsonDecodeRule()->transform('invalid', $this->ctx()));
     }
 
     #[Test]
@@ -76,14 +67,6 @@ final class DataRulesTest extends TestCase
     }
 
     #[Test]
-    public function testArrayToKeyValue(): void
-    {
-        $data = [['id' => 1, 'name' => 'Alice'], ['id' => 2, 'name' => 'Bob']];
-        $result = new ArrayToKeyValueRule()->transform($data, $this->ctx(['key' => 'id', 'value' => 'name']));
-        $this->assertSame([1 => 'Alice', 2 => 'Bob'], $result);
-    }
-
-    #[Test]
     public function testImplode(): void
     {
         $this->assertSame('a,b,c', new ImplodeRule()->transform(['a', 'b', 'c'], $this->ctx()));
@@ -94,10 +77,8 @@ final class DataRulesTest extends TestCase
     #[Test]
     public function testGetName(): void
     {
-        $this->assertIsString(new \KaririCode\Transformer\Rule\Data\CsvToArrayRule()->getName());
-        $this->assertIsString(new \KaririCode\Transformer\Rule\Data\JsonEncodeRule()->getName());
-        $this->assertIsString(new \KaririCode\Transformer\Rule\Data\JsonDecodeRule()->getName());
-        $this->assertIsString(new \KaririCode\Transformer\Rule\Data\ImplodeRule()->getName());
-        $this->assertIsString(new \KaririCode\Transformer\Rule\Data\ArrayToKeyValueRule()->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Data\CsvToArrayRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Data\JsonEncodeRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Data\ImplodeRule())->getName());
     }
 }

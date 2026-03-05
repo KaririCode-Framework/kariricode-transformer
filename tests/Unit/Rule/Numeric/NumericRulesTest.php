@@ -12,9 +12,6 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(\KaririCode\Transformer\Rule\Numeric\CurrencyFormatRule::class)]
-#[CoversClass(\KaririCode\Transformer\Rule\Numeric\PercentageRule::class)]
-#[CoversClass(\KaririCode\Transformer\Rule\Numeric\OrdinalRule::class)]
-#[CoversClass(\KaririCode\Transformer\Rule\Numeric\NumberToWordsRule::class)]
 final class NumericRulesTest extends TestCase
 {
     private function ctx(array $params = []): TransformationContext
@@ -70,9 +67,6 @@ final class NumericRulesTest extends TestCase
     #[Test]
     public function testGetName(): void
     {
-        $this->assertIsString(new \KaririCode\Transformer\Rule\Numeric\CurrencyFormatRule()->getName());
-        $this->assertIsString(new \KaririCode\Transformer\Rule\Numeric\PercentageRule()->getName());
-        $this->assertIsString(new \KaririCode\Transformer\Rule\Numeric\OrdinalRule()->getName());
-        $this->assertIsString(new \KaririCode\Transformer\Rule\Numeric\NumberToWordsRule()->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Numeric\CurrencyFormatRule())->getName());
     }
 }

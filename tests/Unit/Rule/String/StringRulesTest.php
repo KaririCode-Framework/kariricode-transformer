@@ -88,12 +88,12 @@ final class StringRulesTest extends TestCase
     public function testGetName(): void
     {
         // String rules
-        $this->assertIsString(new \KaririCode\Transformer\Rule\String\CamelCaseRule()->getName());
-        $this->assertIsString(new \KaririCode\Transformer\Rule\String\SnakeCaseRule()->getName());
-        $this->assertIsString(new \KaririCode\Transformer\Rule\String\KebabCaseRule()->getName());
-        $this->assertIsString(new \KaririCode\Transformer\Rule\String\PascalCaseRule()->getName());
-        $this->assertIsString(new \KaririCode\Transformer\Rule\String\MaskRule()->getName());
-        $this->assertIsString(new \KaririCode\Transformer\Rule\String\ReverseRule()->getName());
-        $this->assertIsString(new \KaririCode\Transformer\Rule\String\RepeatRule()->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\String\CamelCaseRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\String\SnakeCaseRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\String\KebabCaseRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\String\PascalCaseRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\String\MaskRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\String\ReverseRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\String\RepeatRule())->getName());
     }
 }

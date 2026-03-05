@@ -73,7 +73,7 @@ final class BrazilianRulesTest extends TestCase
     {
         $this->assertIsString(new CpfToDigitsRule()->getName());
         $this->assertIsString(new CnpjToDigitsRule()->getName());
-        $this->assertIsString(new \KaririCode\Transformer\Rule\Brazilian\CepToDigitsRule()->getName());
-        $this->assertIsString(new \KaririCode\Transformer\Rule\Brazilian\PhoneFormatRule()->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Brazilian\CepToDigitsRule())->getName());
+        $this->assertIsString((new \KaririCode\Transformer\Rule\Brazilian\PhoneFormatRule())->getName());
     }
 }
