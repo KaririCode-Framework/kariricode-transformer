@@ -12,6 +12,13 @@ use KaririCode\Transformer\Contract\TransformationRule;
  *
  * Parameters: decimals (int, 2), dec_point (string, '.'), thousands (string, ','), prefix (string, '').
  */
+/**
+ * Formats a numeric value as a currency string.
+ *
+ * @package KaririCode\Transformer\Rule\Numeric
+ * @author  Walmir Silva <walmir.silva@kariricode.org>
+ * @since   3.1.0 ARFA 1.3
+ */
 final readonly class CurrencyFormatRule implements TransformationRule
 {
     public function transform(mixed $value, TransformationContext $context): mixed

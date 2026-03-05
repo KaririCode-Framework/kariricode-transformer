@@ -8,6 +8,13 @@ use KaririCode\Transformer\Contract\TransformationContext;
 use KaririCode\Transformer\Contract\TransformationRule;
 
 /** Strips formatting from CNPJ: "11.222.333/0001-81" → "11222333000181". */
+/**
+ * Extracts only digits from a CNPJ string.
+ *
+ * @package KaririCode\Transformer\Rule\Brazilian
+ * @author  Walmir Silva <walmir.silva@kariricode.org>
+ * @since   3.1.0 ARFA 1.3
+ */
 final readonly class CnpjToDigitsRule implements TransformationRule
 {
     public function transform(mixed $value, TransformationContext $context): mixed

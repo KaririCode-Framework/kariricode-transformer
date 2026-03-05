@@ -8,6 +8,13 @@ use KaririCode\Transformer\Contract\TransformationContext;
 use KaririCode\Transformer\Contract\TransformationRule;
 
 /** Groups array elements by a field value. Parameters: field (string). */
+/**
+ * Groups an array of arrays by a configurable key.
+ *
+ * @package KaririCode\Transformer\Rule\Structure
+ * @author  Walmir Silva <walmir.silva@kariricode.org>
+ * @since   3.1.0 ARFA 1.3
+ */
 final readonly class GroupByRule implements TransformationRule
 {
     public function transform(mixed $value, TransformationContext $context): mixed

@@ -4,6 +4,13 @@ declare(strict_types=1);
 
 namespace KaririCode\Transformer\Result;
 
+/**
+ * Immutable result of a full transformation pass.
+ *
+ * @package KaririCode\Transformer\Result
+ * @author  Walmir Silva <walmir.silva@kariricode.org>
+ * @since   3.1.0 ARFA 1.3
+ */
 final class TransformationResult
 {
     /** @var list<FieldTransformation> */

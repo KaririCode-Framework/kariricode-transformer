@@ -8,6 +8,13 @@ use KaririCode\Transformer\Contract\TransformationContext;
 use KaririCode\Transformer\Contract\TransformationRule;
 
 /** Converts an integer to ordinal string: 1 → "1st", 2 → "2nd", 23 → "23rd". */
+/**
+ * Converts an integer to its ordinal string (1st, 2nd, 3rd…).
+ *
+ * @package KaririCode\Transformer\Rule\Numeric
+ * @author  Walmir Silva <walmir.silva@kariricode.org>
+ * @since   3.1.0 ARFA 1.3
+ */
 final readonly class OrdinalRule implements TransformationRule
 {
     public function transform(mixed $value, TransformationContext $context): mixed

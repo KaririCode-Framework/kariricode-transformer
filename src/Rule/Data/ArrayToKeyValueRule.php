@@ -8,6 +8,13 @@ use KaririCode\Transformer\Contract\TransformationContext;
 use KaririCode\Transformer\Contract\TransformationRule;
 
 /** Transforms a list of objects/arrays into a key→value map. Parameters: key, value. */
+/**
+ * Converts an indexed array of [key, value] pairs to an associative array.
+ *
+ * @package KaririCode\Transformer\Rule\Data
+ * @author  Walmir Silva <walmir.silva@kariricode.org>
+ * @since   3.1.0 ARFA 1.3
+ */
 final readonly class ArrayToKeyValueRule implements TransformationRule
 {
     public function transform(mixed $value, TransformationContext $context): mixed

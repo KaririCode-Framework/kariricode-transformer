@@ -8,6 +8,13 @@ use KaririCode\Transformer\Contract\TransformationContext;
 use KaririCode\Transformer\Contract\TransformationRule;
 
 /** Converts a date string to Unix timestamp. Parameters: format (string, 'Y-m-d'). */
+/**
+ * Converts a date string to a Unix timestamp.
+ *
+ * @package KaririCode\Transformer\Rule\Date
+ * @author  Walmir Silva <walmir.silva@kariricode.org>
+ * @since   3.1.0 ARFA 1.3
+ */
 final readonly class DateToTimestampRule implements TransformationRule
 {
     public function transform(mixed $value, TransformationContext $context): mixed

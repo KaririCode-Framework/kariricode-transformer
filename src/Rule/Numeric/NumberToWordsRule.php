@@ -8,6 +8,13 @@ use KaririCode\Transformer\Contract\TransformationContext;
 use KaririCode\Transformer\Contract\TransformationRule;
 
 /** Converts small integers (0–999) to English words. */
+/**
+ * Converts a number to its word representation.
+ *
+ * @package KaririCode\Transformer\Rule\Numeric
+ * @author  Walmir Silva <walmir.silva@kariricode.org>
+ * @since   3.1.0 ARFA 1.3
+ */
 final readonly class NumberToWordsRule implements TransformationRule
 {
     private const ONES = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',

@@ -8,6 +8,13 @@ use KaririCode\Transformer\Contract\TransformationContext;
 use KaririCode\Transformer\Contract\TransformationRule;
 
 /** Strips formatting from CPF: "529.982.247-25" → "52998224725". */
+/**
+ * Extracts only digits from a CPF string.
+ *
+ * @package KaririCode\Transformer\Rule\Brazilian
+ * @author  Walmir Silva <walmir.silva@kariricode.org>
+ * @since   3.1.0 ARFA 1.3
+ */
 final readonly class CpfToDigitsRule implements TransformationRule
 {
     public function transform(mixed $value, TransformationContext $context): mixed

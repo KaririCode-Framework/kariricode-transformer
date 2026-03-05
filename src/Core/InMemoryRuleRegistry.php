@@ -8,6 +8,13 @@ use KaririCode\Transformer\Contract\RuleRegistry;
 use KaririCode\Transformer\Contract\TransformationRule;
 use KaririCode\Transformer\Exception\InvalidRuleException;
 
+/**
+ * In-memory rule registry backed by a plain PHP array.
+ *
+ * @package KaririCode\Transformer\Core
+ * @author  Walmir Silva <walmir.silva@kariricode.org>
+ * @since   3.1.0 ARFA 1.3
+ */
 final class InMemoryRuleRegistry implements RuleRegistry
 {
     /** @var array<string, TransformationRule> */

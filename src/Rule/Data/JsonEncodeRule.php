@@ -7,6 +7,13 @@ namespace KaririCode\Transformer\Rule\Data;
 use KaririCode\Transformer\Contract\TransformationContext;
 use KaririCode\Transformer\Contract\TransformationRule;
 
+/**
+ * Encodes an array to a JSON string.
+ *
+ * @package KaririCode\Transformer\Rule\Data
+ * @author  Walmir Silva <walmir.silva@kariricode.org>
+ * @since   3.1.0 ARFA 1.3
+ */
 final readonly class JsonEncodeRule implements TransformationRule
 {
     public function transform(mixed $value, TransformationContext $context): mixed

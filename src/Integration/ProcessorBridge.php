@@ -7,6 +7,13 @@ namespace KaririCode\Transformer\Integration;
 use KaririCode\Transformer\Core\TransformerEngine;
 use KaririCode\Transformer\Result\TransformationResult;
 
+/**
+ * Bridges the processor-pipeline to the transformer engine.
+ *
+ * @package KaririCode\Transformer\Integration
+ * @author  Walmir Silva <walmir.silva@kariricode.org>
+ * @since   3.1.0 ARFA 1.3
+ */
 final readonly class ProcessorBridge
 {
     /** @param array<string, list<string|array>> $fieldRules */

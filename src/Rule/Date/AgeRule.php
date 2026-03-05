@@ -8,6 +8,13 @@ use KaririCode\Transformer\Contract\TransformationContext;
 use KaririCode\Transformer\Contract\TransformationRule;
 
 /** Transforms a birth date into an integer age. Parameters: from (string, 'Y-m-d'). */
+/**
+ * Computes the age in years from a date string.
+ *
+ * @package KaririCode\Transformer\Rule\Date
+ * @author  Walmir Silva <walmir.silva@kariricode.org>
+ * @since   3.1.0 ARFA 1.3
+ */
 final readonly class AgeRule implements TransformationRule
 {
     public function transform(mixed $value, TransformationContext $context): mixed

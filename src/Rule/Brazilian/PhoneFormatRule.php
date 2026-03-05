@@ -13,6 +13,13 @@ use KaririCode\Transformer\Contract\TransformationRule;
  * 10 digits → (XX) XXXX-XXXX (landline)
  * 11 digits → (XX) XXXXX-XXXX (mobile)
  */
+/**
+ * Formats a Brazilian phone number with DDD.
+ *
+ * @package KaririCode\Transformer\Rule\Brazilian
+ * @author  Walmir Silva <walmir.silva@kariricode.org>
+ * @since   3.1.0 ARFA 1.3
+ */
 final readonly class PhoneFormatRule implements TransformationRule
 {
     public function transform(mixed $value, TransformationContext $context): mixed

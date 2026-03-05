@@ -8,6 +8,13 @@ use KaririCode\Transformer\Contract\TransformationContext;
 use KaririCode\Transformer\Contract\TransformationRule;
 
 /** Converts a date string to ISO 8601 format. Parameters: from (string, 'd/m/Y'), timezone (string, 'UTC'). */
+/**
+ * Converts a date string to ISO 8601 format.
+ *
+ * @package KaririCode\Transformer\Rule\Date
+ * @author  Walmir Silva <walmir.silva@kariricode.org>
+ * @since   3.1.0 ARFA 1.3
+ */
 final readonly class DateToIso8601Rule implements TransformationRule
 {
     public function transform(mixed $value, TransformationContext $context): mixed

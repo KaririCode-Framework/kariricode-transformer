@@ -8,6 +8,13 @@ use KaririCode\Transformer\Contract\TransformationContext;
 use KaririCode\Transformer\Contract\TransformationRule;
 
 /** Hashes a string value. Parameters: algo (string, 'sha256'). */
+/**
+ * Hashes a string using a configurable algorithm.
+ *
+ * @package KaririCode\Transformer\Rule\Encoding
+ * @author  Walmir Silva <walmir.silva@kariricode.org>
+ * @since   3.1.0 ARFA 1.3
+ */
 final readonly class HashRule implements TransformationRule
 {
     public function transform(mixed $value, TransformationContext $context): mixed

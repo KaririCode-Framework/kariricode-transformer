@@ -7,6 +7,13 @@ namespace KaririCode\Transformer\Rule\String;
 use KaririCode\Transformer\Contract\TransformationContext;
 use KaririCode\Transformer\Contract\TransformationRule;
 
+/**
+ * Applies a mask pattern to a string (e.g. phone, CPF, CEP).
+ *
+ * @package KaririCode\Transformer\Rule\String
+ * @author  Walmir Silva <walmir.silva@kariricode.org>
+ * @since   3.1.0 ARFA 1.3
+ */
 final readonly class MaskRule implements TransformationRule
 {
     public function transform(mixed $value, TransformationContext $context): mixed
